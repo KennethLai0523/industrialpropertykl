@@ -15,7 +15,7 @@
     }
 
     .container {
-      max-width: 1080px;
+      max-width: 1180px;
       margin: 0 auto;
       padding: 24px 16px 40px;
     }
@@ -60,6 +60,37 @@
       color: #111;
     }
 
+    .tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      padding: 12px 18px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .tab-btn.active {
+      background: #d9a73f;
+      border-color: #d9a73f;
+      color: #111;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
     .card {
       background: #fff;
       border-radius: 16px;
@@ -72,6 +103,13 @@
       margin-top: 0;
       margin-bottom: 16px;
       font-size: 22px;
+    }
+
+    .section-note {
+      color: #666;
+      font-size: 14px;
+      margin-top: -6px;
+      margin-bottom: 16px;
     }
 
     .grid-2 {
@@ -88,6 +126,7 @@
       margin-bottom: 12px;
       font-size: 15px;
       font-family: inherit;
+      background: #fff;
     }
 
     textarea {
@@ -172,6 +211,7 @@
       grid-template-columns: 90px 1fr;
       gap: 12px;
       align-items: start;
+      background: #fff;
     }
 
     .listing-row img {
@@ -186,12 +226,31 @@
     .listing-title {
       font-weight: 700;
       margin-bottom: 4px;
+      font-size: 16px;
     }
 
     .listing-meta {
       color: #666;
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.6;
+    }
+
+    .placeholder-box {
+      border: 2px dashed #ddd;
+      border-radius: 14px;
+      padding: 28px 20px;
+      background: #fcfcfc;
+    }
+
+    .placeholder-box h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .placeholder-box p {
+      margin: 0;
+      color: #666;
+      line-height: 1.6;
     }
 
     @media (max-width: 720px) {
@@ -217,60 +276,99 @@
       <button class="btn btn-dark" id="logoutBtn" type="button">Logout</button>
     </div>
 
-    <div class="card">
-      <h2>Add Listing</h2>
-
-      <div class="grid-2">
-        <select id="category">
-          <option value="commercial">Commercial</option>
-          <option value="residential">Residential</option>
-        </select>
-
-        <select id="listingType">
-          <option value="sale">Sale</option>
-          <option value="rent">Rent</option>
-        </select>
-      </div>
-
-      <input id="title" placeholder="Title" />
-      <input id="price" placeholder="Price" />
-
-      <div class="grid-2">
-        <input id="location" placeholder="Location" />
-        <input id="state" placeholder="State" />
-      </div>
-
-      <div class="grid-2">
-        <input id="city" placeholder="City" />
-        <input id="type" placeholder="Type (Warehouse / Factory)" />
-      </div>
-
-      <input id="bua" placeholder="Built-up" />
-      <textarea id="description" placeholder="Description"></textarea>
-
-      <h3>Cover Photo</h3>
-      <div class="drop-zone" id="dropZone">
-        <strong>Drag photo here</strong>
-        <span class="muted">or click to choose one image</span>
-        <input type="file" id="fileInput" accept="image/*" hidden />
-      </div>
-
-      <div class="preview-wrap" id="previewWrap">
-        <img id="previewImage" class="preview-image" alt="Preview" />
-        <div class="preview-actions">
-          <button class="btn btn-light" id="changeImageBtn" type="button">Choose Another Photo</button>
-          <button class="btn btn-light" id="removeImageBtn" type="button">Remove Photo</button>
-        </div>
-      </div>
-
-      <div class="progress-text" id="progressText"></div>
-      <button class="btn" id="saveBtn" type="button">Save Listing</button>
-      <div class="status-text" id="statusText"></div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="listingsTab">Listings</button>
+      <button class="tab-btn" data-tab="projectsTab">Projects</button>
+      <button class="tab-btn" data-tab="blogTab">Blog</button>
     </div>
 
-    <div class="card">
-      <h2>All Listings</h2>
-      <div class="listings-wrap" id="listingList"></div>
+    <!-- LISTINGS TAB -->
+    <div class="tab-panel active" id="listingsTab">
+      <div class="card">
+        <h2>Add Listing</h2>
+        <div class="section-note">
+          Use this for subsale / rent property listings. Detail page will be generated from this data.
+        </div>
+
+        <div class="grid-2">
+          <select id="category">
+            <option value="commercial">Commercial</option>
+            <option value="residential">Residential</option>
+          </select>
+
+          <select id="listingType">
+            <option value="sale">Sale</option>
+            <option value="rent">Rent</option>
+          </select>
+        </div>
+
+        <input id="title" placeholder="Title" />
+        <input id="price" placeholder="Price" />
+
+        <div class="grid-2">
+          <input id="location" placeholder="Location / Address" />
+          <input id="state" placeholder="State" />
+        </div>
+
+        <div class="grid-2">
+          <input id="city" placeholder="City" />
+          <input id="type" placeholder="Type (Warehouse / Detached Factory / etc)" />
+        </div>
+
+        <input id="bua" placeholder="Built-up / Size" />
+        <textarea id="description" placeholder="Description"></textarea>
+
+        <h3>Cover Photo</h3>
+        <div class="drop-zone" id="dropZone">
+          <strong>Drag photo here</strong>
+          <span class="muted">or click to choose one image</span>
+          <input type="file" id="fileInput" accept="image/*" hidden />
+        </div>
+
+        <div class="preview-wrap" id="previewWrap">
+          <img id="previewImage" class="preview-image" alt="Preview" />
+          <div class="preview-actions">
+            <button class="btn btn-light" id="changeImageBtn" type="button">Choose Another Photo</button>
+            <button class="btn btn-light" id="removeImageBtn" type="button">Remove Photo</button>
+          </div>
+        </div>
+
+        <div class="progress-text" id="progressText"></div>
+        <button class="btn" id="saveBtn" type="button">Save Listing</button>
+        <div class="status-text" id="statusText"></div>
+      </div>
+
+      <div class="card">
+        <h2>All Listings</h2>
+        <div class="listings-wrap" id="listingList"></div>
+      </div>
+    </div>
+
+    <!-- PROJECTS TAB -->
+    <div class="tab-panel" id="projectsTab">
+      <div class="card">
+        <h2>Projects</h2>
+        <div class="placeholder-box">
+          <h3>Phase 2</h3>
+          <p>
+            This section will be for new project pages like Armani Bizcore, ATS Armani Industrial Park,
+            Bukit Raja projects and similar launch / project landing pages.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOG TAB -->
+    <div class="tab-panel" id="blogTab">
+      <div class="card">
+        <h2>Blog</h2>
+        <div class="placeholder-box">
+          <h3>Phase 3</h3>
+          <p>
+            This section will be for blog posts, SEO articles, project updates and educational content.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -339,6 +437,20 @@
         .replace(/-+/g, "-");
     }
 
+    function formatPostedDate(timestamp) {
+      if (!timestamp) return "Recently";
+
+      const now = Date.now();
+      const diffMs = now - timestamp;
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+      if (diffDays <= 0) return "Today";
+      if (diffDays === 1) return "1 day ago";
+      if (diffDays < 30) return `${diffDays} days ago`;
+
+      return new Date(timestamp).toLocaleDateString();
+    }
+
     function clearPreview() {
       selectedFile = null;
       fileInput.value = "";
@@ -399,6 +511,7 @@
     }
 
     function getFormData(imageUrl) {
+      const now = Date.now();
       const title = document.getElementById("title").value.trim();
       const price = document.getElementById("price").value.trim();
       const location = document.getElementById("location").value.trim();
@@ -409,6 +522,7 @@
       const description = document.getElementById("description").value.trim();
 
       return {
+        contentType: "listing",
         category: document.getElementById("category").value,
         listingType: document.getElementById("listingType").value,
         title,
@@ -422,8 +536,10 @@
         image: imageUrl,
         description,
         status: "active",
-        createdAt: Date.now(),
-        updatedAt: Date.now()
+        agentName: "Kenneth Lai",
+        postedAt: now,
+        createdAt: now,
+        updatedAt: now
       };
     }
 
@@ -443,6 +559,7 @@
 
     async function loadListings() {
       listingList.innerHTML = "Loading...";
+
       try {
         const q = query(collection(db, "listings"), orderBy("createdAt", "desc"));
         const snapshot = await getDocs(q);
@@ -464,8 +581,9 @@
               <div class="listing-title">${item.title || "-"}</div>
               <div class="listing-meta">
                 ${item.price || "-"}<br>
-                ${item.location || "-"}, ${item.state || "-"}<br>
-                ${item.type || "-"} | ${item.listingType || "-"} | ${item.status || "-"}
+                ${item.location || "-"}, ${item.city || "-"}, ${item.state || "-"}<br>
+                ${item.type || "-"} | ${item.listingType || "-"} | ${item.status || "-"}<br>
+                ${item.agentName || "Kenneth Lai"} • ${formatPostedDate(item.postedAt)}
               </div>
             </div>
           `;
@@ -514,6 +632,23 @@
       }
     }
 
+    function setupTabs() {
+      const tabButtons = document.querySelectorAll(".tab-btn");
+      const tabPanels = document.querySelectorAll(".tab-panel");
+
+      tabButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const targetId = button.getAttribute("data-tab");
+
+          tabButtons.forEach((btn) => btn.classList.remove("active"));
+          tabPanels.forEach((panel) => panel.classList.remove("active"));
+
+          button.classList.add("active");
+          document.getElementById(targetId).classList.add("active");
+        });
+      });
+    }
+
     onAuthStateChanged(auth, (user) => {
       if (!user) {
         window.location.href = "login.html";
@@ -552,6 +687,8 @@
 
     changeImageBtn.addEventListener("click", () => fileInput.click());
     removeImageBtn.addEventListener("click", clearPreview);
+
+    setupTabs();
   </script>
 </body>
 </html>
