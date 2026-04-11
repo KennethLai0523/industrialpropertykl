@@ -931,8 +931,8 @@
     </div>
   </footer>
 
-  <script>
-    const listings = [
+  <script type="module">
+    let listings = [
       {
         title: 'Sungai Buloh Factory',
         price: 'For Rent : RM15,000/month',
@@ -1190,8 +1190,41 @@ closeBucket.addEventListener('click', function () {
   savedBucket.classList.add('hidden');
 });
 
-renderListings(listings);
 renderSavedBucket();
-  </script>
+  // 🔥 FIREBASE CONFIG (CONNECTED)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyANrifzDiBgsM8MnEShe-kxW_e89vKhCZ8",
+  authDomain: "industrialpropertykl.firebaseapp.com",
+  projectId: "industrialpropertykl",
+  storageBucket: "industrialpropertykl.firebasestorage.app",
+  messagingSenderId: "612612953532",
+  appId: "1:612612953532:web:94f956f783cb948db887b9",
+  measurementId: "G-ML49L4TQ29"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 🔥 LOAD DATA FROM FIRESTORE
+async function loadListingsFromFirebase() {
+  const querySnapshot = await getDocs(collection(db, "listings"));
+
+  const firebaseListings = [];
+
+  querySnapshot.forEach((doc) => {
+    firebaseListings.push(doc.data());
+  });
+
+  listings = firebaseListings;
+  renderListings(listings);
+}
+
+// 🚀 USE FIREBASE INSTEAD OF STATIC DATA
+loadListingsFromFirebase();
+
+</script>
 </body>
 </html>
