@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Property Details</title>
-
-<style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #f5f5f5;
-}
-<!DOCTYPE html>
-<html lang="en">
-<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Property Detail</title>
@@ -67,20 +54,17 @@ body {
       color: #111;
       white-space: nowrap;
     }
-
     .content {
       display: grid;
       grid-template-columns: 2fr 340px;
       gap: 24px;
     }
-
     .card {
       background: white;
       border-radius: 10px;
       padding: 18px;
       margin-bottom: 20px;
     }
-
     .main-image {
       width: 100%;
       height: 520px;
@@ -88,7 +72,6 @@ body {
       border-radius: 8px;
       background: #eee;
     }
-
     .thumbs {
       display: flex;
       gap: 8px;
@@ -106,7 +89,6 @@ body {
     .thumbs img.active {
       border-color: #f0b132;
     }
-
     .overview-grid,
     .details-grid {
       display: grid;
@@ -114,28 +96,23 @@ body {
       gap: 12px 24px;
       margin-top: 16px;
     }
-
     .overview-item,
     .details-item {
       border-bottom: 1px solid #eee;
       padding-bottom: 10px;
     }
-
     .label {
       font-size: 13px;
       color: #666;
       margin-bottom: 4px;
     }
-
     .value {
       font-weight: bold;
     }
-
     .desc {
       line-height: 1.7;
       white-space: pre-line;
     }
-
     .map-link {
       display: inline-block;
       margin-top: 12px;
@@ -146,7 +123,6 @@ body {
       border-radius: 6px;
       font-weight: bold;
     }
-
     .agent-card img {
       width: 58px;
       height: 58px;
@@ -227,14 +203,16 @@ body {
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "YOUR_KEY",
-      authDomain: "YOUR_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET"
+      apiKey: "AIzaSyANrifzDiBgsM8MpFSbe-kxW_e89vKbCZ8",
+      authDomain: "industrialpropertykl.firebaseapp.com",
+      projectId: "industrialpropertykl",
+      storageBucket: "industrialpropertykl.firebasestorage.app",
+      messagingSenderId: "612612953532",
+      appId: "1:612612953532:web:94f956f783cb948db887b9"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -257,7 +235,7 @@ body {
         }
         return "RM" + num.toLocaleString();
       }
-      return "RM" + price;
+      return String(price).startsWith("RM") ? String(price) : "RM" + price;
     }
 
     function buildBadge(listingType, hotOffer) {
@@ -305,7 +283,7 @@ body {
         const data = snap.data();
         const gallery = getGallery(data);
         const mainImage = gallery[0] || "";
-        const whatsappText = encodeURIComponent(`Hi, I am interested in [${data.title}]`);
+        const whatsappText = encodeURIComponent(`Hi, I am interested in [${data.title || ""}]`);
         const whatsappLink = data.agentPhone
           ? `https://wa.me/${String(data.agentPhone).replace(/\D/g, "")}?text=${whatsappText}`
           : "#";
@@ -313,7 +291,7 @@ body {
         const thumbsHtml = gallery.map((img, index) => `
           <img
             src="${img}"
-            class="${index === 0 ? 'active' : ''}"
+            class="${index === 0 ? "active" : ""}"
             onclick="changeMainImage('${img}', this)"
           >
         `).join("");
@@ -332,7 +310,7 @@ body {
           <div class="content">
             <div>
               <div class="card">
-                <img id="mainImage" class="main-image" src="${mainImage}">
+                <img id="mainImage" class="main-image" src="${mainImage}" alt="${data.title || "Property"}">
                 ${gallery.length ? `<div class="thumbs">${thumbsHtml}</div>` : ""}
               </div>
 
@@ -345,11 +323,11 @@ body {
                   </div>
                   <div class="overview-item">
                     <div class="label">Built-up</div>
-                    <div class="value">${data.bua ? data.bua + " sqft" : "-"}</div>
+                    <div class="value">${data.bua || "-"}</div>
                   </div>
                   <div class="overview-item">
                     <div class="label">Land Area</div>
-                    <div class="value">${data.landArea ? data.landArea + " sqft" : "-"}</div>
+                    <div class="value">${data.landArea || "-"}</div>
                   </div>
                   <div class="overview-item">
                     <div class="label">Property Status</div>
@@ -378,11 +356,11 @@ body {
                   </div>
                   <div class="details-item">
                     <div class="label">Property Size</div>
-                    <div class="value">${data.bua ? data.bua + " sqft" : "-"}</div>
+                    <div class="value">${data.bua || "-"}</div>
                   </div>
                   <div class="details-item">
                     <div class="label">Land Area</div>
-                    <div class="value">${data.landArea ? data.landArea + " sqft" : "-"}</div>
+                    <div class="value">${data.landArea || "-"}</div>
                   </div>
                   <div class="details-item">
                     <div class="label">Property Type</div>
@@ -415,10 +393,10 @@ body {
             <div>
               <div class="card agent-card">
                 <div class="agent-top">
-                  <img src="${data.agentImage || ''}" alt="Agent">
+                  <img src="${data.agentImage || "https://via.placeholder.com/58x58?text=Agent"}" alt="Agent">
                   <div>
                     <div class="agent-name">${data.agentName || "Agent"}</div>
-                    <div style="color:#777; font-size:13px;">View Listings</div>
+                    <div style="color:#777; font-size:13px;">Industrial Property Specialist</div>
                   </div>
                 </div>
 
@@ -427,7 +405,7 @@ body {
                 <input class="form-control" type="email" placeholder="Email">
                 <textarea class="form-control" rows="5">Hello, I am interested in [${data.title || ""}]</textarea>
 
-                <button class="btn btn-orange">Send Message</button>
+                <button class="btn btn-orange" type="button">Send Message</button>
 
                 ${data.agentPhone ? `<a class="btn btn-outline" href="tel:${data.agentPhone}">Call</a>` : ""}
                 ${data.agentPhone ? `<a class="btn btn-outline" href="${whatsappLink}" target="_blank">WhatsApp</a>` : ""}
@@ -443,166 +421,5 @@ body {
 
     loadListing();
   </script>
-</body>
-</html>
-.container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 20px;
-}
-
-.main {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
-}
-
-.card {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-}
-
-.image {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-.price {
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.title {
-  font-size: 24px;
-  margin: 10px 0;
-}
-
-.meta {
-  color: gray;
-  margin-bottom: 10px;
-}
-
-.spec {
-  margin: 10px 0;
-}
-
-.whatsapp {
-  background: #25D366;
-  color: white;
-  padding: 12px;
-  display: block;
-  text-align: center;
-  border-radius: 8px;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-<div id="loading">Loading...</div>
-
-<div id="content" style="display:none;">
-  
-  <div class="main">
-
-    <div>
-      <img id="image" class="image">
-      <div class="card">
-        <div id="price" class="price"></div>
-        <div id="title" class="title"></div>
-        <div id="location" class="meta"></div>
-
-        <div class="spec"><strong>Type:</strong> <span id="type"></span></div>
-        <div class="spec"><strong>Built-up:</strong> <span id="bua"></span></div>
-        <div class="spec"><strong>Category:</strong> <span id="category"></span></div>
-        <div class="spec"><strong>Status:</strong> <span id="status"></span></div>
-
-        <hr>
-
-        <div id="description"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Contact Agent</h3>
-      <p>Kenneth Lai</p>
-
-      <a id="wa" class="whatsapp" target="_blank">
-        WhatsApp Now
-      </a>
-    </div>
-
-  </div>
-
-</div>
-
-</div>
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyANrifzDiBgsM8MpFSbe-kxW_e89vKbCZ8",
-  authDomain: "industrialpropertykl.firebaseapp.com",
-  projectId: "industrialpropertykl",
-  storageBucket: "industrialpropertykl.firebasestorage.app",
-  messagingSenderId: "612612953532",
-  appId: "1:612612953532:web:94f956f783cb948db887b9"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
-
-async function loadData() {
-
-  if (!id) return;
-
-  const docRef = doc(db, "listings", id);
-  const snap = await getDoc(docRef);
-
-  if (!snap.exists()) {
-    document.getElementById("loading").innerText = "Not found";
-    return;
-  }
-
-  const data = snap.data();
-
-  document.getElementById("image").src = data.image;
-  document.getElementById("price").innerText = data.price;
-  document.getElementById("title").innerText = data.title;
-  document.getElementById("location").innerText = data.location + ", " + data.state;
-
-  document.getElementById("type").innerText = data.type;
-  document.getElementById("bua").innerText = data.bua;
-  document.getElementById("category").innerText = data.category;
-  document.getElementById("status").innerText = data.status;
-
-  document.getElementById("description").innerText = data.description;
-
-  const msg = `Hi Kenneth, I am interested in ${data.title}`;
-  document.getElementById("wa").href =
-    "https://wa.me/60166287357?text=" + encodeURIComponent(msg);
-
-  document.getElementById("loading").style.display = "none";
-  document.getElementById("content").style.display = "block";
-}
-
-loadData();
-
-</script>
-
 </body>
 </html>
