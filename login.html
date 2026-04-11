@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Login | Industrial Property KL</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -23,16 +21,15 @@
     .card {
       width: 100%;
       max-width: 420px;
-      background: #ffffff;
+      background: #fff;
       border-radius: 16px;
       padding: 32px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
     }
 
     h1 {
       margin: 0 0 24px;
       font-size: 34px;
-      line-height: 1.1;
       color: #111;
     }
 
@@ -56,7 +53,7 @@
 
     .input:focus {
       border-color: #d9a73f;
-      box-shadow: 0 0 0 3px rgba(217, 167, 63, 0.12);
+      box-shadow: 0 0 0 3px rgba(217,167,63,0.12);
     }
 
     .btn {
@@ -83,19 +80,8 @@
       min-height: 22px;
     }
 
-    .msg.error {
-      color: #d93025;
-    }
-
-    .msg.success {
-      color: #188038;
-    }
-
-    .small {
-      margin-top: 14px;
-      font-size: 13px;
-      color: #666;
-    }
+    .msg.error { color: #d93025; }
+    .msg.success { color: #188038; }
 
     .debug {
       margin-top: 14px;
@@ -106,6 +92,7 @@
       font-size: 13px;
       word-break: break-word;
       display: none;
+      white-space: pre-wrap;
     }
   </style>
 </head>
@@ -123,10 +110,6 @@
 
     <div class="msg" id="msg"></div>
     <div class="debug" id="debugBox"></div>
-
-    <div class="small">
-      If login still fails, send me the exact error code shown below.
-    </div>
   </div>
 
   <script type="module">
@@ -138,7 +121,7 @@
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyANrifzDiBgsM8MnEShe-kxW_e89vKhCZ8",
+      apiKey: "AIzaSyANrifzDiBgsM8MpFSbe-kxW_e89vKbCZ8",
       authDomain: "industrialpropertykl.firebaseapp.com",
       projectId: "industrialpropertykl",
       storageBucket: "industrialpropertykl.firebasestorage.app",
@@ -173,25 +156,20 @@
     }
 
     function friendlyError(err) {
-      const code = err?.code || "unknown-error";
-
-      switch (code) {
+      switch (err?.code) {
         case "auth/invalid-email":
           return "Invalid email format.";
         case "auth/user-not-found":
-          return "User not found in Firebase Authentication.";
+          return "User not found.";
         case "auth/wrong-password":
           return "Wrong password.";
         case "auth/invalid-credential":
-          return "Email or password is incorrect.";
         case "auth/invalid-login-credentials":
           return "Email or password is incorrect.";
-        case "auth/too-many-requests":
-          return "Too many attempts. Please wait and try again.";
-        case "auth/network-request-failed":
-          return "Network error. Please check your internet.";
         case "auth/operation-not-allowed":
-          return "Email/Password sign-in is not enabled in Firebase.";
+          return "Email/Password sign-in is not enabled.";
+        case "auth/api-key-not-valid":
+          return "Firebase API key is still invalid.";
         default:
           return "Login failed.";
       }
@@ -222,7 +200,7 @@
         setMessage("Login successful. Redirecting...", "success");
         window.location.href = "admin.html";
       } catch (err) {
-        console.error("Firebase login error:", err);
+        console.error(err);
         setMessage(friendlyError(err), "error");
         showDebug(`Error code: ${err.code || "none"}\nMessage: ${err.message || "No message"}`);
       } finally {
@@ -231,11 +209,9 @@
     }
 
     loginBtn.addEventListener("click", login);
-
     passwordInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") login();
     });
-
     emailInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") login();
     });
