@@ -1027,12 +1027,14 @@
             <div class="listing-price">${item.price}</div>
             <h3 class="listing-title">${item.title}</h3>
             <p class="listing-location">${item.location}, ${item.state}</p>
-            <p class="listing-meta"><strong>Type:</strong> ${item.type}</p>
-            <p class="listing-meta"><strong>Built-up:</strong> ${item.bua}</p>
-            <p class="listing-desc">${item.description}</p>
+            <p class="listing-meta"><strong>Built-up:</strong> ${item.bua || "-"}</p>
+            <p class="listing-meta"><strong>Type:</strong> ${item.type || "-"}</p>
+            <p class="listing-meta">
+              <strong>${item.agentName || "Kenneth Lai"}</strong> • ${formatPostedDate(item.postedAt)}
+            </p>
             <div class="listing-actions">
               <a class="btn-wa" href="https://wa.me/60166287357?text=${encodeURIComponent('Hi Kenneth, I am interested in ' + item.title + ' at ' + item.location + '.')}" target="_blank">WhatsApp</a>
-              <a class="btn-primary" href="detail.html?id=${item.id}">Get Details</a>
+              <a class="btn-primary" href="detail.html?id=${item.id}">Details</a>
             </div>
           </div>
         `;
@@ -1176,6 +1178,20 @@ function renderSavedBucket() {
       </div>
     </div>
   `).join('');
+}
+
+function formatPostedDate(timestamp) {
+  if (!timestamp) return "Recently";
+
+  const now = Date.now();
+  const diffDays = Math.floor((now - timestamp) / (1000 * 60 * 60 * 24));
+
+  if (diffDays <= 0) return "Today";
+  if (diffDays === 1) return "1 day ago";
+  if (diffDays < 30) return diffDays + " days ago";
+
+  const date = new Date(timestamp);
+  return date.toLocaleDateString();
 }
 
 const bucketToggle = document.getElementById('bucketToggle');
