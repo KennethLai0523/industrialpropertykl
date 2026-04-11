@@ -1,205 +1,557 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Panel</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta charset="UTF-8" />
+  <title>Admin Panel | Industrial Property KL</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
+    * { box-sizing: border-box; }
+
     body {
-      font-family: Arial;
-      background: #f5f5f5;
       margin: 0;
-      padding: 20px;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f5f5;
+      color: #111;
     }
 
     .container {
-      max-width: 900px;
-      margin: auto;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
     }
 
     h1 {
-      margin-bottom: 20px;
+      margin: 0;
+      font-size: 32px;
+    }
+
+    .btn {
+      padding: 12px 16px;
+      border: none;
+      border-radius: 10px;
+      background: #d9a73f;
+      color: #111;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .btn-dark {
+      background: #111;
+      color: #fff;
+    }
+
+    .btn-light {
+      background: #efefef;
+      color: #111;
     }
 
     .card {
-      background: white;
+      background: #fff;
+      border-radius: 16px;
       padding: 20px;
-      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.07);
       margin-bottom: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 22px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
 
     input, textarea, select {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 12px;
-      border-radius: 8px;
+      padding: 12px 14px;
       border: 1px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-size: 15px;
+      font-family: inherit;
     }
 
-    button {
-      padding: 12px 16px;
-      border: none;
-      border-radius: 8px;
-      background: #d9a73f;
-      font-weight: bold;
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .drop-zone {
+      border: 2px dashed #d9a73f;
+      border-radius: 14px;
+      padding: 28px 18px;
+      text-align: center;
+      background: #fffaf0;
       cursor: pointer;
+      transition: 0.2s ease;
+      margin-bottom: 14px;
     }
 
-    .listing-item {
-      border-bottom: 1px solid #eee;
-      padding: 10px 0;
+    .drop-zone.dragover {
+      background: #fff1ca;
+      border-color: #c28e1f;
     }
 
-    .logout {
-      float: right;
-      background: black;
-      color: white;
+    .drop-zone strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .muted {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .preview-wrap {
+      display: none;
+      margin-bottom: 14px;
+    }
+
+    .preview-wrap.show {
+      display: block;
+    }
+
+    .preview-image {
+      width: 100%;
+      max-width: 340px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .preview-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .status-text {
+      min-height: 20px;
+      margin-top: 12px;
+      font-weight: 700;
+    }
+
+    .progress-text {
+      min-height: 18px;
+      margin-bottom: 12px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .listings-wrap {
+      display: grid;
+      gap: 12px;
+    }
+
+    .listing-row {
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .listing-row img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      background: #fafafa;
+    }
+
+    .listing-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .listing-meta {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 720px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .listing-row {
+        grid-template-columns: 1fr;
+      }
+
+      .listing-row img {
+        width: 100%;
+        height: 180px;
+      }
     }
   </style>
 </head>
-
 <body>
+  <div class="container">
+    <div class="topbar">
+      <h1>Admin Panel</h1>
+      <button class="btn btn-dark" id="logoutBtn" type="button">Logout</button>
+    </div>
 
-<div class="container">
+    <div class="card">
+      <h2>Add Listing</h2>
 
-  <h1>
-    Admin Panel
-    <button class="logout" onclick="logout()">Logout</button>
-  </h1>
+      <div class="grid-2">
+        <select id="category">
+          <option value="commercial">Commercial</option>
+          <option value="residential">Residential</option>
+        </select>
 
-  <!-- ADD LISTING -->
-  <div class="card">
-    <h2>Add Listing</h2>
-
-    <select id="category">
-      <option value="commercial">Commercial</option>
-      <option value="residential">Residential</option>
-    </select>
-
-    <select id="listingType">
-      <option value="sale">Sale</option>
-      <option value="rent">Rent</option>
-    </select>
-
-    <input id="title" placeholder="Title">
-    <input id="price" placeholder="Price">
-    <input id="location" placeholder="Location">
-    <input id="state" placeholder="State">
-    <input id="city" placeholder="City">
-    <input id="type" placeholder="Type (Warehouse / Factory)">
-    <input id="bua" placeholder="Built-up">
-    <input id="image" placeholder="Image URL (for now)">
-    <textarea id="description" placeholder="Description"></textarea>
-
-    <button onclick="saveListing()">Save Listing</button>
-
-    <p id="msg"></p>
-  </div>
-
-  <!-- EXISTING LISTINGS -->
-  <div class="card">
-    <h2>All Listings</h2>
-    <div id="listingList"></div>
-  </div>
-
-</div>
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-  getAuth,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyANrifzDiBgsM8MpFSbe-kxW_e89vKbCZ8",
-  authDomain: "industrialpropertykl.firebaseapp.com",
-  projectId: "industrialpropertykl",
-  storageBucket: "industrialpropertykl.firebasestorage.app",
-  messagingSenderId: "612612953532",
-  appId: "1:612612953532:web:94f956f783cb948db887b9"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-
-// 🔐 PROTECT PAGE
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "login.html";
-  }
-});
-
-
-// 🚪 LOGOUT
-window.logout = async function () {
-  await signOut(auth);
-  window.location.href = "login.html";
-};
-
-
-// 🔥 SAVE LISTING
-window.saveListing = async function () {
-
-  const data = {
-    category: document.getElementById("category").value,
-    listingType: document.getElementById("listingType").value,
-    title: document.getElementById("title").value,
-    price: document.getElementById("price").value,
-    location: document.getElementById("location").value,
-    state: document.getElementById("state").value,
-    city: document.getElementById("city").value,
-    type: document.getElementById("type").value,
-    bua: document.getElementById("bua").value,
-    image: document.getElementById("image").value,
-    description: document.getElementById("description").value,
-    status: "active",
-    createdAt: Date.now(),
-    updatedAt: Date.now()
-  };
-
-  await addDoc(collection(db, "listings"), data);
-
-  document.getElementById("msg").innerText = "Saved!";
-  loadListings();
-};
-
-
-// 📦 LOAD LISTINGS
-async function loadListings() {
-  const snapshot = await getDocs(collection(db, "listings"));
-  const list = document.getElementById("listingList");
-
-  list.innerHTML = "";
-
-  snapshot.forEach(doc => {
-    const item = doc.data();
-
-    list.innerHTML += `
-      <div class="listing-item">
-        <strong>${item.title}</strong><br>
-        ${item.price} - ${item.location}
+        <select id="listingType">
+          <option value="sale">Sale</option>
+          <option value="rent">Rent</option>
+        </select>
       </div>
-    `;
-  });
-}
 
-loadListings();
+      <input id="title" placeholder="Title" />
+      <input id="price" placeholder="Price" />
 
-</script>
+      <div class="grid-2">
+        <input id="location" placeholder="Location" />
+        <input id="state" placeholder="State" />
+      </div>
 
+      <div class="grid-2">
+        <input id="city" placeholder="City" />
+        <input id="type" placeholder="Type (Warehouse / Factory)" />
+      </div>
+
+      <input id="bua" placeholder="Built-up" />
+      <textarea id="description" placeholder="Description"></textarea>
+
+      <h3>Cover Photo</h3>
+      <div class="drop-zone" id="dropZone">
+        <strong>Drag photo here</strong>
+        <span class="muted">or click to choose one image</span>
+        <input type="file" id="fileInput" accept="image/*" hidden />
+      </div>
+
+      <div class="preview-wrap" id="previewWrap">
+        <img id="previewImage" class="preview-image" alt="Preview" />
+        <div class="preview-actions">
+          <button class="btn btn-light" id="changeImageBtn" type="button">Choose Another Photo</button>
+          <button class="btn btn-light" id="removeImageBtn" type="button">Remove Photo</button>
+        </div>
+      </div>
+
+      <div class="progress-text" id="progressText"></div>
+      <button class="btn" id="saveBtn" type="button">Save Listing</button>
+      <div class="status-text" id="statusText"></div>
+    </div>
+
+    <div class="card">
+      <h2>All Listings</h2>
+      <div class="listings-wrap" id="listingList"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import {
+      getStorage,
+      ref,
+      uploadBytesResumable,
+      getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyANrifzDiBgsM8MpFSbe-kxW_e89vKbCZ8",
+      authDomain: "industrialpropertykl.firebaseapp.com",
+      projectId: "industrialpropertykl",
+      storageBucket: "industrialpropertykl.firebasestorage.app",
+      messagingSenderId: "612612953532",
+      appId: "1:612612953532:web:94f956f783cb948db887b9",
+      measurementId: "G-ML49L4TQ29"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    const dropZone = document.getElementById("dropZone");
+    const fileInput = document.getElementById("fileInput");
+    const previewWrap = document.getElementById("previewWrap");
+    const previewImage = document.getElementById("previewImage");
+    const changeImageBtn = document.getElementById("changeImageBtn");
+    const removeImageBtn = document.getElementById("removeImageBtn");
+    const progressText = document.getElementById("progressText");
+    const statusText = document.getElementById("statusText");
+    const saveBtn = document.getElementById("saveBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const listingList = document.getElementById("listingList");
+
+    let selectedFile = null;
+
+    function setStatus(text, color = "#111") {
+      statusText.textContent = text;
+      statusText.style.color = color;
+    }
+
+    function slugify(text) {
+      return (text || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
+    }
+
+    function clearPreview() {
+      selectedFile = null;
+      fileInput.value = "";
+      previewImage.src = "";
+      previewWrap.classList.remove("show");
+      progressText.textContent = "";
+    }
+
+    function showPreview(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previewImage.src = e.target.result;
+        previewWrap.classList.add("show");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleSelectedFile(file) {
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        setStatus("Please choose an image file only.", "red");
+        return;
+      }
+
+      selectedFile = file;
+      setStatus("");
+      progressText.textContent = "";
+      showPreview(file);
+    }
+
+    async function uploadImage(file, title) {
+      const safeTitle = slugify(title) || "listing";
+      const safeFileName = file.name.replace(/\s+/g, "-").toLowerCase();
+      const storageRef = ref(
+        storage,
+        `listing-images/${safeTitle}/${Date.now()}-${safeFileName}`
+      );
+
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      return await new Promise((resolve, reject) => {
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+            progressText.textContent = `Uploading image... ${progress}%`;
+          },
+          (error) => reject(error),
+          async () => {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            resolve(downloadURL);
+          }
+        );
+      });
+    }
+
+    function getFormData(imageUrl) {
+      const title = document.getElementById("title").value.trim();
+      const price = document.getElementById("price").value.trim();
+      const location = document.getElementById("location").value.trim();
+      const state = document.getElementById("state").value.trim();
+      const city = document.getElementById("city").value.trim();
+      const type = document.getElementById("type").value.trim();
+      const bua = document.getElementById("bua").value.trim();
+      const description = document.getElementById("description").value.trim();
+
+      return {
+        category: document.getElementById("category").value,
+        listingType: document.getElementById("listingType").value,
+        title,
+        slug: slugify(title),
+        price,
+        location,
+        state,
+        city,
+        type,
+        bua,
+        image: imageUrl,
+        description,
+        status: "active",
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      };
+    }
+
+    function resetForm() {
+      document.getElementById("category").value = "commercial";
+      document.getElementById("listingType").value = "sale";
+      document.getElementById("title").value = "";
+      document.getElementById("price").value = "";
+      document.getElementById("location").value = "";
+      document.getElementById("state").value = "";
+      document.getElementById("city").value = "";
+      document.getElementById("type").value = "";
+      document.getElementById("bua").value = "";
+      document.getElementById("description").value = "";
+      clearPreview();
+    }
+
+    async function loadListings() {
+      listingList.innerHTML = "Loading...";
+      try {
+        const q = query(collection(db, "listings"), orderBy("createdAt", "desc"));
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+          listingList.innerHTML = "<div class='muted'>No listings yet.</div>";
+          return;
+        }
+
+        listingList.innerHTML = "";
+
+        snapshot.forEach((docSnap) => {
+          const item = docSnap.data();
+          const row = document.createElement("div");
+          row.className = "listing-row";
+          row.innerHTML = `
+            <img src="${item.image || ""}" alt="${item.title || "Listing"}" onerror="this.src=''; this.style.background='#f3f3f3';" />
+            <div>
+              <div class="listing-title">${item.title || "-"}</div>
+              <div class="listing-meta">
+                ${item.price || "-"}<br>
+                ${item.location || "-"}, ${item.state || "-"}<br>
+                ${item.type || "-"} | ${item.listingType || "-"} | ${item.status || "-"}
+              </div>
+            </div>
+          `;
+          listingList.appendChild(row);
+        });
+      } catch (error) {
+        console.error(error);
+        listingList.innerHTML = "<div class='muted'>Failed to load listings.</div>";
+      }
+    }
+
+    async function saveListing() {
+      const title = document.getElementById("title").value.trim();
+      const price = document.getElementById("price").value.trim();
+      const location = document.getElementById("location").value.trim();
+
+      if (!title || !price || !location) {
+        setStatus("Please fill in at least title, price, and location.", "red");
+        return;
+      }
+
+      if (!selectedFile) {
+        setStatus("Please drag or choose one cover photo first.", "red");
+        return;
+      }
+
+      saveBtn.disabled = true;
+      setStatus("Saving listing...", "#333");
+
+      try {
+        const imageUrl = await uploadImage(selectedFile, title);
+        const data = getFormData(imageUrl);
+
+        await addDoc(collection(db, "listings"), data);
+
+        setStatus("Listing saved successfully.", "green");
+        progressText.textContent = "";
+        resetForm();
+        await loadListings();
+      } catch (error) {
+        console.error(error);
+        progressText.textContent = "";
+        setStatus("Failed to save listing. Check Storage rules and setup.", "red");
+      } finally {
+        saveBtn.disabled = false;
+      }
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        loadListings();
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "login.html";
+    });
+
+    saveBtn.addEventListener("click", saveListing);
+
+    dropZone.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", (e) => {
+      handleSelectedFile(e.target.files[0]);
+    });
+
+    dropZone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropZone.classList.add("dragover");
+    });
+
+    dropZone.addEventListener("dragleave", () => {
+      dropZone.classList.remove("dragover");
+    });
+
+    dropZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropZone.classList.remove("dragover");
+      handleSelectedFile(e.dataTransfer.files[0]);
+    });
+
+    changeImageBtn.addEventListener("click", () => fileInput.click());
+    removeImageBtn.addEventListener("click", clearPreview);
+  </script>
 </body>
 </html>
