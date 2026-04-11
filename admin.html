@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+
+    button {
+      padding: 12px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #d9a73f;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .listing-item {
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+
+    .logout {
+      float: right;
+      background: black;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>
+    Admin Panel
+    <button class="logout" onclick="logout()">Logout</button>
+  </h1>
+
+  <!-- ADD LISTING -->
+  <div class="card">
+    <h2>Add Listing</h2>
+
+    <select id="category">
+      <option value="commercial">Commercial</option>
+      <option value="residential">Residential</option>
+    </select>
+
+    <select id="listingType">
+      <option value="sale">Sale</option>
+      <option value="rent">Rent</option>
+    </select>
+
+    <input id="title" placeholder="Title">
+    <input id="price" placeholder="Price">
+    <input id="location" placeholder="Location">
+    <input id="state" placeholder="State">
+    <input id="city" placeholder="City">
+    <input id="type" placeholder="Type (Warehouse / Factory)">
+    <input id="bua" placeholder="Built-up">
+    <input id="image" placeholder="Image URL (for now)">
+    <textarea id="description" placeholder="Description"></textarea>
+
+    <button onclick="saveListing()">Save Listing</button>
+
+    <p id="msg"></p>
+  </div>
+
+  <!-- EXISTING LISTINGS -->
+  <div class="card">
+    <h2>All Listings</h2>
+    <div id="listingList"></div>
+  </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyANrifzDiBgsM8MpFSbe-kxW_e89vKbCZ8",
+  authDomain: "industrialpropertykl.firebaseapp.com",
+  projectId: "industrialpropertykl",
+  storageBucket: "industrialpropertykl.firebasestorage.app",
+  messagingSenderId: "612612953532",
+  appId: "1:612612953532:web:94f956f783cb948db887b9"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+
+// 🔐 PROTECT PAGE
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+  }
+});
+
+
+// 🚪 LOGOUT
+window.logout = async function () {
+  await signOut(auth);
+  window.location.href = "login.html";
+};
+
+
+// 🔥 SAVE LISTING
+window.saveListing = async function () {
+
+  const data = {
+    category: document.getElementById("category").value,
+    listingType: document.getElementById("listingType").value,
+    title: document.getElementById("title").value,
+    price: document.getElementById("price").value,
+    location: document.getElementById("location").value,
+    state: document.getElementById("state").value,
+    city: document.getElementById("city").value,
+    type: document.getElementById("type").value,
+    bua: document.getElementById("bua").value,
+    image: document.getElementById("image").value,
+    description: document.getElementById("description").value,
+    status: "active",
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  };
+
+  await addDoc(collection(db, "listings"), data);
+
+  document.getElementById("msg").innerText = "Saved!";
+  loadListings();
+};
+
+
+// 📦 LOAD LISTINGS
+async function loadListings() {
+  const snapshot = await getDocs(collection(db, "listings"));
+  const list = document.getElementById("listingList");
+
+  list.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const item = doc.data();
+
+    list.innerHTML += `
+      <div class="listing-item">
+        <strong>${item.title}</strong><br>
+        ${item.price} - ${item.location}
+      </div>
+    `;
+  });
+}
+
+loadListings();
+
+</script>
+
+</body>
+</html>
