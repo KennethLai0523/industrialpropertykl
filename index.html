@@ -1032,7 +1032,7 @@
             <p class="listing-desc">${item.description}</p>
             <div class="listing-actions">
               <a class="btn-wa" href="https://wa.me/60166287357?text=${encodeURIComponent('Hi Kenneth, I am interested in ' + item.title + ' at ' + item.location + '.')}" target="_blank">WhatsApp</a>
-              <a class="btn-primary" href="${generateLink(item.title)}">Get Details</a>
+              <a class="btn-primary" href="detail.html?id=${item.id}">Get Details</a>
             </div>
           </div>
         `;
@@ -1215,7 +1215,10 @@ async function loadListingsFromFirebase() {
   const firebaseListings = [];
 
   querySnapshot.forEach((doc) => {
-    firebaseListings.push(doc.data());
+    firebaseListings.push({
+      id: doc.id,
+      ...doc.data()
+    });
   });
 
   listings = firebaseListings;
