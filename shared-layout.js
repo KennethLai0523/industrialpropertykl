@@ -78,25 +78,34 @@ async function loadProjectsDropdown() {
 }
 
 function setupSharedHeaderFooter() {
-  const mobileToggle = document.getElementById("mobileToggle");
-  const navShell = document.getElementById("navShell");
   const dropdowns = document.querySelectorAll(".dropdown");
   const backToTop = document.getElementById("backToTop");
 
-  if (mobileToggle && navShell) {
-    mobileToggle.addEventListener("click", () => {
-      navShell.classList.toggle("open");
-    });
-  }
-
   dropdowns.forEach((drop) => {
     const btn = drop.querySelector(".drop-btn");
+
     if (btn) {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", (e) => {
         if (window.innerWidth <= 820) {
+          e.preventDefault();
+
+          dropdowns.forEach((otherDrop) => {
+            if (otherDrop !== drop) {
+              otherDrop.classList.remove("open");
+            }
+          });
+
           drop.classList.toggle("open");
         }
       });
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (window.innerWidth <= 820) {
+      if (!e.target.closest(".dropdown")) {
+        dropdowns.forEach((drop) => drop.classList.remove("open"));
+      }
     }
   });
 
