@@ -819,9 +819,17 @@
             <p class="listing-location">${item.location}, ${item.state}</p>
             <p class="listing-meta"><strong>Built-up:</strong> ${item.bua || "-"}</p>
             <p class="listing-meta"><strong>Type:</strong> ${item.type || "-"}</p>
-            <p class="listing-meta">
-              <strong>${item.agentName || "Kenneth Lai"}</strong> • ${formatPostedDate(item.postedAt)}
-            </p>
+            <div class="agent-row">
+              <img
+                class="agent-avatar"
+                src="${item.agentImage || 'images/default-agent.png'}"
+                alt="${item.agentName || 'Agent'}"
+                onerror="this.src='images/default-agent.png'"
+              />
+              <span class="agent-name">${item.agentName || "Kenneth Lai"}</span>
+              <span class="agent-dot">•</span>
+              <span>${formatPostedDate(item.postedAt)}</span>
+            </div>
             <div class="listing-actions">
               <a class="btn-wa" href="https://wa.me/60166287357?text=${encodeURIComponent('Hi Kenneth, I am interested in ' + item.title + ' at ' + item.location + '.')}" target="_blank">WhatsApp</a>
               <a class="btn-primary" href="detail.html?id=${item.id}">Details</a>
