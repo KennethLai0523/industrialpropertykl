@@ -282,6 +282,31 @@ img {
   cursor: pointer;
 }
 
+.agent-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 14px;
+  color: #666;
+}
+
+.agent-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.agent-name {
+  font-weight: 500;
+  color: #222;
+}
+
+.agent-dot {
+  color: #aaa;
+}
+
 /* MOBILE */
 @media (max-width: 820px) {
   .nav {
