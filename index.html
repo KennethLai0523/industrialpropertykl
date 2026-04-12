@@ -427,6 +427,123 @@
       gap: 18px;
     }
 
+    .about-showcase {
+      display: grid;
+      grid-template-columns: 48px 1fr 48px;
+      align-items: center;
+      gap: 18px;
+    }
+    
+    .about-arrow {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      color: #cfcfcf;
+      font-size: 34px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    
+    .about-arrow:hover {
+      color: #999;
+    }
+    
+    .about-showcase-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.04);
+      padding: 28px 34px;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 34px;
+      align-items: center;
+    }
+    
+    .about-showcase-photo {
+      text-align: center;
+    }
+    
+    .about-showcase-photo img {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 14px;
+      margin: 0 auto 14px;
+      background: #f1f1f1;
+    }
+    
+    .about-showcase-name {
+      font-weight: 700;
+      color: #d9a73f;
+      margin-bottom: 4px;
+    }
+    
+    .about-showcase-role {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    
+    .about-showcase-content {
+      text-align: center;
+    }
+    
+    .about-showcase-title {
+      font-style: italic;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    
+    .about-showcase-content p {
+      margin: 0 0 14px;
+      color: #555;
+      line-height: 1.8;
+      font-style: italic;
+    }
+    
+    .about-showcase-contact {
+      margin-top: 18px;
+      color: #444;
+      line-height: 1.9;
+      font-style: italic;
+    }
+    
+    .about-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    
+    .about-dots span {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #cfcfcf;
+      display: inline-block;
+    }
+    
+    .about-dots span.active {
+      background: #111;
+    }
+    
+    @media (max-width: 900px) {
+      .about-showcase {
+        grid-template-columns: 1fr;
+      }
+    
+      .about-arrow {
+        display: none;
+      }
+    
+      .about-showcase-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 22px;
+      }
+    }
+
     .about-card,
     .contact-card {
       padding: 28px;
@@ -546,29 +663,46 @@
     </section>
 
     <section class="section" id="about">
-      <div class="container about-wrap">
-
-        <div class="about-card">
-          <h2 class="section-title">Industrial Property Agent KL | Meet Kenneth Lai</h2>
-          <p class="section-subtitle">
-            Hi, I’m <strong>Kenneth Lai</strong>, an industrial property agent in KL specialising in factory for sale, warehouse for rent and industrial property in Kuala Lumpur, Klang and Selangor. I help business owners and investors secure the right industrial space based on their operational and investment needs.
-          </p>
-
-          <ul>
-            <li>Specialised in factory, warehouse & industrial listings</li>
-            <li>Focus on Klang, Shah Alam, Bukit Raja & key industrial zones</li>
-            <li>Fast response via WhatsApp for direct enquiries</li>
-            <li>Suitable for own use, relocation & investment</li>
-          </ul>
+      <div class="container">
+        <div class="about-showcase">
+          <button class="about-arrow" type="button" aria-label="Previous">‹</button>
+    
+          <div class="about-showcase-card">
+            <div class="about-showcase-photo">
+              <img src="images/kenneth.png" alt="Kenneth Lai">
+              <div class="about-showcase-name">Kenneth Lai</div>
+              <div class="about-showcase-role">Industrial Property Specialist</div>
+            </div>
+    
+            <div class="about-showcase-content">
+              <div class="about-showcase-title">Kenneth Lai - Your Industrial Property Specialist</div>
+    
+              <p>
+                Industrial property decisions are important for business growth, relocation and investment.
+                I focus on helping owners, occupiers and investors find suitable factory, warehouse and
+                industrial property opportunities across Kuala Lumpur, Klang and Selangor.
+              </p>
+    
+              <p>
+                Whether you are looking for detached factories, semi-detached factories, warehouses or
+                industrial land, I provide practical guidance based on your operational needs, access
+                requirements and long-term property goals.
+              </p>
+    
+              <div class="about-showcase-contact">
+                <div><strong>Phone:</strong> +60 16-628 7357</div>
+                <div><strong>Email:</strong> kennethrealtyconsultancy@gmail.com</div>
+              </div>
+            </div>
+          </div>
+    
+          <button class="about-arrow" type="button" aria-label="Next">›</button>
         </div>
-
-        <div class="about-card" style="text-align:center;">
-          <img src="https://via.placeholder.com/300x350" alt="Kenneth Lai" style="border-radius:12px; margin-bottom:16px;">
-          <h3>Kenneth Lai</h3>
-          <p style="color:var(--muted);">Industrial Property Specialist</p>
-          <a class="btn-wa" href="https://wa.me/60166287357" target="_blank">Contact Me</a>
+    
+        <div class="about-dots">
+          <span class="active"></span>
+          <span></span>
         </div>
-
       </div>
     </section>
 
