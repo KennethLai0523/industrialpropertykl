@@ -371,11 +371,11 @@ button {
   }
 
   .container {
-    width: calc(100% - 20px);
+    width: calc(100% - 24px);
   }
 
   .topbar {
-    padding-bottom: 8px;
+    padding-bottom: 6px;
   }
 
   .nav {
@@ -384,9 +384,9 @@ button {
     grid-template-areas:
       "brand actions"
       "menu menu";
-    align-items: start;
-    gap: 10px;
-    padding: 10px 0;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
     min-height: auto;
   }
 
@@ -394,17 +394,16 @@ button {
     grid-area: brand;
     min-width: 0;
     overflow: hidden;
-    gap: 8px;
   }
 
   .brand-mark {
-    width: 34px;
-    height: 34px;
+    width: 38px;
+    height: 38px;
   }
 
   .brand-mark img {
-    width: 34px;
-    height: 34px;
+    width: 38px;
+    height: 38px;
   }
 
   .brand-text {
@@ -412,30 +411,28 @@ button {
   }
 
   .brand-text small {
-    font-size: 8px;
-    letter-spacing: 0.6px;
+    font-size: 9px;
+    letter-spacing: 0.8px;
   }
 
   .brand-text strong {
-    font-size: 12px;
-    line-height: 1.1;
+    font-size: 14px;
+    line-height: 1.15;
     word-break: break-word;
   }
 
   .nav-actions {
     grid-area: actions;
     margin-left: 0;
-    gap: 6px;
-    align-self: start;
+    gap: 8px;
   }
 
   .nav-actions .btn-primary,
   .nav-actions .btn-outline,
   .nav-actions .btn-wa {
-    padding: 8px 10px;
-    font-size: 12px;
+    padding: 8px 12px;
+    font-size: 13px;
     border-radius: 8px;
-    min-height: 38px;
   }
 
   .mobile-toggle {
@@ -451,9 +448,9 @@ button {
 
   .nav-links {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 6px;
-    margin: 4px 0 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 6px 0 0;
     padding: 0;
     list-style: none;
     align-items: stretch;
@@ -468,12 +465,12 @@ button {
   .nav-link,
   .drop-btn {
     width: 100%;
-    min-height: 40px;
+    min-height: 44px;
     justify-content: center;
     text-align: center;
-    padding: 8px 6px;
-    font-size: 12px;
-    line-height: 1.15;
+    padding: 10px 8px;
+    font-size: 13px;
+    line-height: 1.2;
     border: 1px solid rgba(17,17,17,0.12);
     border-radius: 10px;
     background: rgba(255,255,255,0.18);
@@ -539,17 +536,12 @@ button {
     grid-template-columns: 1fr;
   }
 
-  .bucket-toggle {
-    right: 12px !important;
+  .saved-properties-btn,
+  .saved-btn,
+  .floating-saved,
+  .saved-properties {
     bottom: 84px !important;
-    padding: 10px 14px !important;
-    font-size: 12px !important;
+    right: 12px !important;
     max-width: calc(100vw - 24px);
-  }
-
-  .saved-bucket {
-    right: 12px !important;
-    bottom: 84px !important;
-    width: min(340px, calc(100% - 24px)) !important;
   }
 }
