@@ -456,8 +456,29 @@
 
     <div class="tab-panel" id="projectsTab">
       <div class="card">
-        <h2>Projects</h2>
-        <div class="section-note">This section can be built after Listings and Blog are stable.</div>
+        <h2>Add Project</h2>
+        <div class="section-note">
+          Use this to create new industrial projects and launch pages.
+        </div>
+    
+        <input id="projectTitle" placeholder="Project Title" />
+        <input id="projectLocation" placeholder="Location" />
+    
+        <textarea id="projectShort" placeholder="Short Description"></textarea>
+        <textarea id="projectContent" class="editor-large" placeholder="Full Content"></textarea>
+    
+        <h3 class="subsection-title">Project Cover Image</h3>
+        <input type="file" id="projectCoverInput" accept="image/*" />
+    
+        <h3 class="subsection-title">Project Gallery Images</h3>
+        <input type="file" id="projectGalleryInput" accept="image/*" multiple />
+        <div class="gallery-note">Choose multiple images for the project gallery.</div>
+    
+        <div class="inline-actions">
+          <button class="btn" id="saveProjectBtn" type="button">Save Project</button>
+        </div>
+    
+        <div class="status-text" id="projectStatus"></div>
       </div>
     </div>
 
@@ -588,6 +609,15 @@
     const blogList = document.getElementById("blogList");
     const blogFormTitle = document.getElementById("blogFormTitle");
     const blogEditBanner = document.getElementById("blogEditBanner");
+
+    const projectTitle = document.getElementById("projectTitle");
+    const projectLocation = document.getElementById("projectLocation");
+    const projectShort = document.getElementById("projectShort");
+    const projectContent = document.getElementById("projectContent");
+    const projectCoverInput = document.getElementById("projectCoverInput");
+    const projectGalleryInput = document.getElementById("projectGalleryInput");
+    const saveProjectBtn = document.getElementById("saveProjectBtn");
+    const projectStatus = document.getElementById("projectStatus");
 
     let selectedFile = null;
     let selectedAgentFile = null;
@@ -756,6 +786,19 @@
         urls.push(url);
       }
 
+      return urls;
+    }
+
+    async function uploadProjectGalleryImages(files, title) {
+      if (!files.length) return [];
+      const urls = [];
+    
+      for (const file of files) {
+        if (!file.type.startsWith("image/")) continue;
+        const url = await uploadImage(file, "project-gallery", title, null);
+        urls.push(url);
+      }
+    
       return urls;
     }
 
@@ -1179,6 +1222,72 @@
       }
     }
 
+    async function saveProject() {
+      const title = projectTitle.value.trim();
+      const location = projectLocation.value.trim();
+      const shortDescription = projectShort.value.trim();
+      const fullContent = projectContent.value.trim();
+    
+      if (!title || !location || !shortDescription || !fullContent) {
+        projectStatus.textContent = "Please fill in title, location, short description and full content.";
+        projectStatus.style.color = "red";
+        return;
+      }
+    
+      if (!projectCoverInput.files[0]) {
+        projectStatus.textContent = "Please choose one project cover image.";
+        projectStatus.style.color = "red";
+        return;
+      }
+    
+      saveProjectBtn.disabled = true;
+      projectStatus.textContent = "Saving project...";
+      projectStatus.style.color = "#333";
+    
+      try {
+        const coverImage = await uploadImage(
+          projectCoverInput.files[0],
+          "project-cover",
+          title,
+          null
+        );
+    
+        const galleryImages = await uploadProjectGalleryImages(
+          Array.from(projectGalleryInput.files || []),
+          title
+        );
+    
+        await addDoc(collection(db, "projects"), {
+          title,
+          slug: slugify(title),
+          location,
+          shortDescription,
+          fullContent,
+          coverImage,
+          galleryImages,
+          status: "published",
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        });
+    
+        projectTitle.value = "";
+        projectLocation.value = "";
+        projectShort.value = "";
+        projectContent.value = "";
+        projectCoverInput.value = "";
+        projectGalleryInput.value = "";
+    
+        projectStatus.textContent = "Project saved successfully.";
+        projectStatus.style.color = "green";
+      } catch (error) {
+        console.error(error);
+        projectStatus.textContent = "Failed to save project. Check Storage rules and setup.";
+        projectStatus.style.color = "red";
+      } finally {
+        saveProjectBtn.disabled = false;
+      }
+    }
+
     function setupTabs() {
       const tabButtons = document.querySelectorAll(".tab-btn");
       const tabPanels = document.querySelectorAll(".tab-panel");
@@ -1242,6 +1351,7 @@
 
     saveBlogBtn.addEventListener("click", saveBlog);
     cancelBlogEditBtn.addEventListener("click", resetBlogForm);
+    saveProjectBtn.addEventListener("click", saveProject);
 
     blogDropZone.addEventListener("click", () => blogFileInput.click());
     blogFileInput.addEventListener("change", (e) => {
