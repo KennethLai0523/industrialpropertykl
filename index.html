@@ -456,23 +456,19 @@
     
     .about-showcase-card {
       width: 100%;
-      max-width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
     
       background: transparent;
     
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     
-      border-left: none;
-      border-right: none;
-      border-radius: 0;
-      box-shadow: none;
-    
       padding: 50px 40px;
     
       display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 60px;
+      grid-template-columns: 260px 1fr;
+      gap: 80px;
       align-items: center;
     }
     
@@ -504,6 +500,13 @@
       font-style: italic;
       font-weight: 600;
       margin-bottom: 16px;
+    }
+    .about-showcase {
+      display: grid;
+      grid-template-columns: 60px 1fr 60px;
+      align-items: center;
+      max-width: 1600px;
+      margin: 0 auto;
     }
     
     .about-showcase-content p {
@@ -555,7 +558,7 @@
     }
 
     .about-showcase-content {
-      max-width: 800px;
+      max-width: none;
     }
     
     .about-showcase-photo {
