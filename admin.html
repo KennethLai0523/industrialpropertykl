@@ -1245,13 +1245,17 @@
       projectStatus.style.color = "#333";
     
       try {
+        projectStatus.textContent = "Uploading cover image...";
+        
         const coverImage = await uploadImage(
           projectCoverInput.files[0],
           "project-cover",
           title,
-          null
+          projectStatus
         );
     
+        projectStatus.textContent = "Uploading gallery images...";
+        
         const galleryImages = await uploadProjectGalleryImages(
           Array.from(projectGalleryInput.files || []),
           title
