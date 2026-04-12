@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Project Detail | Industrial Property KL</title>
+
+  <link rel="stylesheet" href="shared-layout.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #f5f5f5;
+    }
+
+    .hero {
+      height: 400px;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: end;
+      padding: 40px;
+      color: white;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .container {
+      width: min(1100px, 90%);
+      margin: auto;
+    }
+
+    .section {
+      background: white;
+      margin-top: 20px;
+      padding: 25px;
+      border-radius: 12px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 10px;
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 20px;
+      background: #d9a73f;
+      color: black;
+      font-weight: bold;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="site-header"></div>
+
+<div id="hero" class="hero"></div>
+
+<div class="container">
+
+  <div class="section">
+    <h2 id="title"></h2>
+    <p id="location"></p>
+    <p id="shortDescription"></p>
+  </div>
+
+  <div class="section">
+    <h2>Project Details</h2>
+    <p id="fullContent"></p>
+  </div>
+
+  <div class="section">
+    <h2>Gallery</h2>
+    <div id="gallery" class="gallery"></div>
+  </div>
+
+  <div class="section">
+    <h2>Enquiry</h2>
+    <a class="btn" href="https://wa.me/60166287357" target="_blank">
+      WhatsApp Kenneth
+    </a>
+  </div>
+
+</div>
+
+<div id="site-footer"></div>
+<script src="shared-layout.js"></script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyANrifzDiBgsM8MpFSbe-kxW_e89vKbCZ8",
+  authDomain: "industrialpropertykl.firebaseapp.com",
+  projectId: "industrialpropertykl",
+  storageBucket: "industrialpropertykl.firebasestorage.app",
+  messagingSenderId: "612612953532",
+  appId: "1:612612953532:web:94f956f783cb948db887b9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+function getId() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("id");
+}
+
+async function loadProject() {
+  const id = getId();
+  if (!id) return;
+
+  const ref = doc(db, "projects", id);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) {
+    document.body.innerHTML = "Project not found";
+    return;
+  }
+
+  const data = snap.data();
+
+  document.getElementById("title").innerText = data.title;
+  document.getElementById("location").innerText = data.location;
+  document.getElementById("shortDescription").innerText = data.shortDescription;
+  document.getElementById("fullContent").innerText = data.fullContent;
+
+  // Hero image
+  const hero = document.getElementById("hero");
+  hero.style.backgroundImage = `url('${data.coverImage}')`;
+  hero.innerText = data.title;
+
+  // Gallery
+  const gallery = document.getElementById("gallery");
+  if (data.galleryImages) {
+    data.galleryImages.forEach(img => {
+      const image = document.createElement("img");
+      image.src = img;
+      gallery.appendChild(image);
+    });
+  }
+}
+
+loadProject();
+</script>
+
+</body>
+</html>
