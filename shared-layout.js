@@ -3,9 +3,6 @@ import {
   getFirestore,
   collection,
   getDocs,
-  query,
-  where,
-  orderBy
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -40,26 +37,40 @@ async function loadProjectsDropdown() {
   if (!dropdown) return;
 
   try {
-    const q = query(
-      collection(db, "projects"),
-      where("status", "==", "published"),
-      orderBy("createdAt", "desc")
-    );
-
-    const snapshot = await getDocs(q);
+    const snapshot = await getDocs(collection(db, "projects"));
 
     if (snapshot.empty) {
       dropdown.innerHTML = `<div style="padding:10px;">No projects yet</div>`;
       return;
     }
 
-    let html = "";
+    const projects = [];
+
     snapshot.forEach((docSnap) => {
       const data = docSnap.data();
-      html += `<a href="project-detail.html?id=${docSnap.id}">${data.title || "Untitled Project"}</a>`;
+
+      if (data.status === "published") {
+        projects.push({
+          id: docSnap.id,
+          title: data.title || "Untitled Project",
+          createdAt: data.createdAt || 0
+        });
+      }
     });
 
-    dropdown.innerHTML = html;
+    if (!projects.length) {
+      dropdown.innerHTML = `<div style="padding:10px;">No projects yet</div>`;
+      return;
+    }
+
+    projects.sort((a, b) => b.createdAt - a.createdAt);
+
+    dropdown.innerHTML = projects
+      .map(
+        (project) =>
+          `<a href="project-detail.html?id=${project.id}">${project.title}</a>`
+      )
+      .join("");
   } catch (error) {
     console.error("Failed to load projects dropdown:", error);
     dropdown.innerHTML = `<div style="padding:10px;">Unable to load projects</div>`;
