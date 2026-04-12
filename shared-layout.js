@@ -114,4 +114,24 @@ async function initSharedLayout() {
   setupSharedHeaderFooter();
 }
 
+function renderAgentRow(item) {
+  const name = item.agentName || "Kenneth Lai";
+  const image = item.agentImage || "images/default-agent.png";
+  const time = formatPostedDate(item.postedAt);
+
+  return `
+    <div class="agent-row">
+      <img 
+        class="agent-avatar" 
+        src="${image}" 
+        alt="${name}"
+        onerror="this.src='images/default-agent.png'"
+      />
+      <span class="agent-name">${name}</span>
+      <span class="agent-dot">•</span>
+      <span>${time}</span>
+    </div>
+  `;
+}
+
 document.addEventListener("DOMContentLoaded", initSharedLayout);
