@@ -40,21 +40,6 @@
       margin: 0 auto;
     }
 
-    .btn-primary,
-    .btn-outline,
-    .btn-wa,
-    .btn-save {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
 
     .saved-bucket {
       position: fixed;
@@ -669,56 +654,7 @@
   <div id="site-footer"></div>
   <script src="shared-layout.js"></script>
   <script type="module">
-    let listings = [
-      {
-        title: 'Sungai Buloh Factory',
-        price: 'For Rent : RM15,000/month',
-        location: 'Sungai Buloh',
-        state: 'Selangor',
-        city: 'Sungai Buloh',
-        type: 'Warehouse',
-        status: 'For Rent',
-        bua: '10,000 sqft',
-        description: 'Power supply: 150 amps (TNB). Truck and container accessible. Rental: RM15,000/month (negotiable). Available from 1 April 2026. Suitable for warehouse, storage or light industrial use. Strategic Sungai Buloh location with good accessibility. Co-agency welcome.',
-        image: 'images/sungai-buloh-factory.jpg'
-      },
-      {
-        title: '7000 - 10000 sqft factory | newly built | 40 feet container well accessible',
-        price: 'For Rent : RM1.6 per sqft',
-        location: 'Sungai Buloh',
-        state: 'Selangor',
-        city: 'Sungai Buloh',
-        type: 'Link Factory',
-        status: 'For Rent',
-        bua: '7000 sqft per unit, total 3 unit',
-        description: 'Industrial factory units in Sungai Buloh. 80x105 feet: 1 unit. 80x88 feet: 2 units. 3 units available. 7,000 sqft each. Suitable for factory, warehouse or storage use. Good accessibility for logistics and transportation. Ideal for own use or investment. Asking RM1.60 psf.',
-        image: 'images/sungai-buloh-factory-units.jpg'
-      },
-      {
-        title: 'Industrial Land + Factory',
-        price: 'For Sale : RM 48 Million',
-        location: 'Klang',
-        state: 'Selangor',
-        city: 'Klang',
-        type: 'Industrial Land',
-        status: 'For Sale',
-        bua: '4 acre',
-        description: 'Land Area: 4 acre. Built-up: Warehouse + Office. Ceiling Height: 40 ft. Power Supply: 5 kV. Floor Loading: Up to 4 tons. Freehold non bumi. Asking Price: RM48 Million.',
-        image: 'images/klang-industrial-land-factory.jpg'
-      },
-      {
-        title: 'Armani Bizcore Ramp-Up Factory',
-        price: 'New Project',
-        location: 'Bukit Raja',
-        state: 'Selangor',
-        city: 'Bukit Raja',
-        type: 'Detached Factory',
-        status: 'For Sale',
-        bua: 'Multiple layouts available',
-        description: 'Freehold ramp-up industrial project in Bukit Raja with direct drive-up access, modern industrial concept and strategic connectivity. Suitable for business use and investment.',
-        image: 'images/armani-bizcore.jpg'
-      }
-    ];
+    let listings = [];
 
     function generateLink(title) {
       return '/' + title.toLowerCase()
@@ -807,23 +743,25 @@
       if (e.key === 'Enter') applyFilters();
     });
 
-    document.querySelectorAll('[data-type-link]').forEach(link => {
-      link.addEventListener('click', function () {
+    document.addEventListener('click', function (e) {
+      const typeLink = e.target.closest('[data-type-link]');
+      if (typeLink) {
         document.getElementById('statusFilter').value = '';
         document.getElementById('stateFilter').value = '';
         document.getElementById('cityFilter').value = '';
         document.getElementById('keywordFilter').value = '';
-        const targetType = this.getAttribute('data-type-link');
+    
+        const targetType = typeLink.getAttribute('data-type-link');
         renderListings(listings.filter(item => item.type === targetType));
-      });
-    });
-
-    document.querySelectorAll('[data-keyword-link]').forEach(link => {
-      link.addEventListener('click', function () {
-        const kw = this.getAttribute('data-keyword-link');
+        return;
+      }
+    
+      const keywordLink = e.target.closest('[data-keyword-link]');
+      if (keywordLink) {
+        const kw = keywordLink.getAttribute('data-keyword-link');
         keywordFilter.value = kw;
         applyFilters();
-      });
+      }
     });
 
     let compareList = [];
