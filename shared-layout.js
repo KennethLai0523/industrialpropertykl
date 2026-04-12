@@ -1,3 +1,26 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyANrifzDiBgsM8MpFSbe-kxW_e89vKbCZ8",
+  authDomain: "industrialpropertykl.firebaseapp.com",
+  projectId: "industrialpropertykl",
+  storageBucket: "industrialpropertykl.firebasestorage.app",
+  messagingSenderId: "612612953532",
+  appId: "1:612612953532:web:94f956f783cb948db887b9",
+  measurementId: "G-ML49L4TQ29"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 async function loadSharedSection(targetId, filePath) {
   const target = document.getElementById(targetId);
   if (!target) return;
@@ -9,6 +32,37 @@ async function loadSharedSection(targetId, filePath) {
     target.innerHTML = html;
   } catch (error) {
     console.error(error);
+  }
+}
+
+async function loadProjectsDropdown() {
+  const dropdown = document.getElementById("projectsDropdown");
+  if (!dropdown) return;
+
+  try {
+    const q = query(
+      collection(db, "projects"),
+      where("status", "==", "published"),
+      orderBy("createdAt", "desc")
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      dropdown.innerHTML = `<div style="padding:10px;">No projects yet</div>`;
+      return;
+    }
+
+    let html = "";
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      html += `<a href="project-detail.html?id=${docSnap.id}">${data.title || "Untitled Project"}</a>`;
+    });
+
+    dropdown.innerHTML = html;
+  } catch (error) {
+    console.error("Failed to load projects dropdown:", error);
+    dropdown.innerHTML = `<div style="padding:10px;">Unable to load projects</div>`;
   }
 }
 
@@ -24,7 +78,7 @@ function setupSharedHeaderFooter() {
     });
   }
 
-  dropdowns.forEach(drop => {
+  dropdowns.forEach((drop) => {
     const btn = drop.querySelector(".drop-btn");
     if (btn) {
       btn.addEventListener("click", () => {
@@ -45,6 +99,7 @@ function setupSharedHeaderFooter() {
 async function initSharedLayout() {
   await loadSharedSection("site-header", "header.html");
   await loadSharedSection("site-footer", "footer.html");
+  await loadProjectsDropdown();
   setupSharedHeaderFooter();
 }
 
