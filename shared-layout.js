@@ -1,4 +1,3 @@
-<script>
 async function loadSharedSection(targetId, filePath) {
   const target = document.getElementById(targetId);
   if (!target) return;
@@ -50,4 +49,3 @@ async function initSharedLayout() {
 }
 
 document.addEventListener("DOMContentLoaded", initSharedLayout);
-</script>
