@@ -355,37 +355,35 @@
           Editing existing listing
         </div>
 
-        <div class="grid-2">
-          <select id="category">
-            <option value="commercial">Commercial</option>
-            <option value="industrial">Industrial</option>
-            <option value="residential">Residential</option>
-            <option value="land">Land</option>
-          </select>
-
-          <select id="listingType">
-            <option value="sale">Sale</option>
-            <option value="rent">Rent</option>
-          </select>
-        </div>
-
-        <input id="title" placeholder="Title" />
-        <input id="price" placeholder="Price (example: 7800000 or 30000)" />
-
-        <div class="grid-2">
-          <input id="location" placeholder="Short Location / Address" />
-          <input id="address" placeholder="Full Address" />
-        </div>
-
-        <div class="grid-2">
-          <input id="state" placeholder="State" />
-          <input id="city" placeholder="City" />
-        </div>
-
-        <div class="grid-2">
-          <input id="type" placeholder="Type (Warehouse / Detached Factory / etc)" />
-          <input id="status" placeholder="Status (active / sold / rented / available)" value="active" />
-        </div>
+    <div class="grid-2">
+      <select id="listingType">
+        <option value="sale">For Sale</option>
+        <option value="rent">For Rent</option>
+      </select>
+    
+      <select id="type">
+        <option value="Detached Factory">Detached Factory</option>
+        <option value="Semi-Detached Factory">Semi-Detached Factory</option>
+        <option value="Link Factory">Link Factory</option>
+        <option value="Warehouse">Warehouse</option>
+        <option value="Industrial Land">Industrial Land</option>
+      </select>
+    </div>
+    
+    <input id="title" placeholder="Title" />
+    <input id="price" placeholder="Price (example: 7800000 or 30000)" />
+    
+    <div class="grid-2">
+      <input id="location" placeholder="Short Location / Address" />
+      <input id="address" placeholder="Full Address" />
+    </div>
+    
+    <div class="grid-2">
+      <input id="state" placeholder="State" />
+      <input id="city" placeholder="City" />
+    </div>
+    
+    <input id="status" placeholder="Status (active / sold / rented / available)" value="active" />
 
         <div class="grid-3">
           <input id="bua" placeholder="Built-up / Size (sqft)" />
@@ -812,7 +810,7 @@
 
       return {
         contentType: "listing",
-        category: document.getElementById("category").value,
+        category: "industrial",
         listingType: document.getElementById("listingType").value,
         title,
         slug: slugify(title),
@@ -870,15 +868,14 @@
       existingAgentImageUrl = "";
       existingGalleryUrls = [];
 
-      document.getElementById("category").value = "commercial";
       document.getElementById("listingType").value = "sale";
+      document.getElementById("type").value = "Detached Factory";
       document.getElementById("title").value = "";
       document.getElementById("price").value = "";
       document.getElementById("location").value = "";
       document.getElementById("address").value = "";
       document.getElementById("state").value = "";
       document.getElementById("city").value = "";
-      document.getElementById("type").value = "";
       document.getElementById("status").value = "active";
       document.getElementById("bua").value = "";
       document.getElementById("landArea").value = "";
@@ -936,7 +933,7 @@
       existingAgentImageUrl = item.agentImage || "";
       existingGalleryUrls = Array.isArray(item.gallery) ? item.gallery : [];
 
-      document.getElementById("category").value = item.category || "commercial";
+      document.getElementById("type").value = item.type || "Detached Factory";
       document.getElementById("listingType").value = item.listingType || "sale";
       document.getElementById("title").value = item.title || "";
       document.getElementById("price").value = item.price || "";
@@ -944,7 +941,6 @@
       document.getElementById("address").value = item.address || "";
       document.getElementById("state").value = item.state || "";
       document.getElementById("city").value = item.city || "";
-      document.getElementById("type").value = item.type || "";
       document.getElementById("status").value = item.status || "active";
       document.getElementById("bua").value = item.bua || "";
       document.getElementById("landArea").value = item.landArea || "";
