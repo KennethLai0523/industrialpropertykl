@@ -864,6 +864,123 @@
     .reviews-section {
       background: #f5f5f5;
     }
+
+    /* ===== FORMAL LISTING STYLE ===== */
+    .listings {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 26px;
+    }
+    
+    .listing-card {
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      overflow: visible;
+      padding-bottom: 0;
+    }
+    
+    .listing-image {
+      height: 210px;
+      border-radius: 0;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    
+    .listing-body {
+      padding: 0;
+    }
+    
+    .listing-price {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    
+    .listing-title {
+      font-size: 18px;
+      line-height: 1.45;
+      margin: 0 0 8px;
+      font-weight: 500;
+    }
+    
+    .listing-location,
+    .listing-meta,
+    .listing-desc {
+      font-size: 13px;
+      color: #555;
+      margin: 0 0 8px;
+    }
+    
+    .listing-meta {
+      display: block;
+    }
+    
+    .listing-actions {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: nowrap;
+    }
+    
+    .listing-actions .btn-wa,
+    .listing-actions .btn-primary {
+      border-radius: 4px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    
+    .agent-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #ddd;
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .agent-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .listing-tag {
+      border-radius: 2px;
+      font-size: 10px;
+      padding: 6px 8px;
+    }
+    
+    .image-btn {
+      border-radius: 4px;
+      width: 32px;
+      height: 32px;
+      font-size: 13px;
+    }
+    
+    @media (max-width: 1100px) {
+      .listings {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    
+    @media (max-width: 820px) {
+      .listings {
+        grid-template-columns: 1fr;
+        gap: 22px;
+      }
+    
+      .listing-image {
+        height: 220px;
+      }
+    }
   </style>
 
   <link rel="stylesheet" href="shared-layout.css" />
