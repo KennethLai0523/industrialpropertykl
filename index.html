@@ -1406,6 +1406,81 @@ async function loadListingsFromFirebase() {
   renderListings(listings);
 }
 
+const agents = [
+  {
+    name: "Kenneth Lai",
+    role: "Industrial Property Specialist",
+    image: "images/kenneth.png",
+    title: "Kenneth Lai - Your Industrial Property Specialist",
+    desc1: `Industrial property decisions are important for business growth, relocation and investment. I focus on helping owners, occupiers and investors find suitable factory, warehouse and industrial property opportunities across Kuala Lumpur, Klang and Selangor.`,
+    desc2: `Whether you are looking for detached factories, semi-detached factories, warehouses or industrial land, I provide practical guidance based on your operational needs, access requirements and long-term property goals.`,
+    phone: "+60 16-628 7357",
+    email: "kennethrealtyconsultancy@gmail.com"
+  },
+  {
+    name: "Alex Tan",
+    role: "Senior Industrial Consultant",
+    image: "images/default-agent.png",
+    title: "Alex Tan - Industrial Property Consultant",
+    desc1: `Alex focuses on helping businesses and investors identify suitable industrial spaces for operational expansion, relocation and long-term asset planning across Klang Valley.`,
+    desc2: `From warehouse leasing to factory acquisition strategy, Alex provides practical support based on location, logistics needs and business growth requirements.`,
+    phone: "+60 12-345 6789",
+    email: "alex@example.com"
+  }
+];
+
+let currentAgentIndex = 0;
+
+function renderAgent(index) {
+  const agent = agents[index];
+  const photoBox = document.querySelector(".about-showcase-photo");
+  const contentBox = document.querySelector(".about-showcase-content");
+  const dots = document.querySelectorAll(".about-dots span");
+
+  if (!photoBox || !contentBox) return;
+
+  photoBox.innerHTML = `
+    <img src="${agent.image}" alt="${agent.name}">
+    <div class="about-showcase-name">${agent.name}</div>
+    <div class="about-showcase-role">${agent.role}</div>
+  `;
+
+  contentBox.innerHTML = `
+    <div class="about-showcase-title">${agent.title}</div>
+    <p>${agent.desc1}</p>
+    <p>${agent.desc2}</p>
+    <div class="about-showcase-contact">
+      <div><strong>Phone:</strong> ${agent.phone}</div>
+      <div><strong>Email:</strong> ${agent.email}</div>
+    </div>
+  `;
+
+  dots.forEach((dot, i) => {
+    dot.classList.toggle("active", i === index);
+  });
+}
+
+function setupAgentSlider() {
+  const prevBtn = document.querySelector('.about-arrow[aria-label="Previous"]');
+  const nextBtn = document.querySelector('.about-arrow[aria-label="Next"]');
+  
+  if (!prevBtn || !nextBtn) return;
+
+  prevBtn.addEventListener("click", () => {
+    currentAgentIndex = (currentAgentIndex - 1 + agents.length) % agents.length;
+    renderAgent(currentAgentIndex);
+  });
+
+  nextBtn.addEventListener("click", () => {
+    currentAgentIndex = (currentAgentIndex + 1) % agents.length;
+    renderAgent(currentAgentIndex);
+  });
+
+  renderAgent(currentAgentIndex);
+}
+
+    
+setupAgentSlider();
 // 🚀 USE FIREBASE INSTEAD OF STATIC DATA
 loadListingsFromFirebase();
 
