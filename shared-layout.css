@@ -484,21 +484,30 @@ button {
     font-size: 10px;
   }
 
-  .dropdown-menu {
-    position: static !important;
-    min-width: 100%;
-    width: 100%;
-    margin-top: 6px;
-    background: rgba(255,255,255,0.22);
-    border-top: none;
-    box-shadow: none;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    display: none;
-    border-radius: 10px;
-    overflow: hidden;
-  }
+.nav-links > li {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute !important;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  min-width: 100%;
+
+  background: #e8b95a;
+  border-top: none;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  display: none;
+
+  border-radius: 10px;
+  overflow: hidden;
+  z-index: 999;
+}
 
   .dropdown.open .dropdown-menu,
   .dropdown:focus-within .dropdown-menu {
