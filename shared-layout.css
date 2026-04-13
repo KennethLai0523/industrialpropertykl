@@ -448,18 +448,19 @@ button {
 
   .nav-links {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
     margin: 6px 0 0;
     padding: 0;
     list-style: none;
-    align-items: stretch;
+    align-items: start;
     width: 100%;
   }
 
   .nav-links > li {
     width: 100%;
     min-width: 0;
+    align-self: start;
   }
 
   .nav-link,
@@ -484,7 +485,7 @@ button {
   }
 
   .dropdown-menu {
-    position: static;
+    position: static !important;
     min-width: 100%;
     width: 100%;
     margin-top: 6px;
@@ -505,6 +506,7 @@ button {
   }
 
   .dropdown-menu a {
+    display: block;
     padding: 12px 14px;
     font-size: 13px;
     border-bottom: 1px solid rgba(255,255,255,0.35);
@@ -534,14 +536,5 @@ button {
 
   .footer-grid {
     grid-template-columns: 1fr;
-  }
-
-  .saved-properties-btn,
-  .saved-btn,
-  .floating-saved,
-  .saved-properties {
-    bottom: 84px !important;
-    right: 12px !important;
-    max-width: calc(100vw - 24px);
   }
 }
