@@ -899,7 +899,22 @@
   }
 
   .hero-content {
-    padding: 40px 0 160px !important;
+    padding: 10px 0 160px !important;   /* was 40px */
+  }
+
+  .hero-badges {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 6px;
+    padding: 0 10px;
+    margin-top: -10px;                  /* add this */
+    margin-bottom: 10px;
+  }
+
+  .badge {
+    white-space: nowrap;
+    padding: 6px 10px;
+    font-size: 12px;
   }
 
   .search-panel {
