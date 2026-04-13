@@ -894,12 +894,13 @@
 @media (max-width: 820px) {
 
   .hero {
+    align-items: flex-start !important;   /* 🔥 THIS fixes it */
     min-height: 900px !important;
     padding-bottom: 200px !important;
   }
 
   .hero-content {
-    padding: 10px 0 160px !important;   /* was 40px */
+    padding: 10px 0 160px !important;
   }
 
   .hero-badges {
