@@ -375,6 +375,19 @@ button {
   transform: rotate(180deg);
 }
 
+.brand-mark {
+  background: transparent !important;
+  border-radius: 0 !important;   /* 🔥 THIS removes the curve */
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+.brand-mark img {
+  border-radius: 0 !important;   /* 🔥 remove curve from image */
+}
+
 /* MOBILE */
 @media (max-width: 820px) {
   html,
