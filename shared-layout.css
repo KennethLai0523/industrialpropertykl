@@ -82,20 +82,24 @@ svg {
 }
 
 .brand-mark {
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  overflow: hidden;
+  width: auto !important;
+  height: auto !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  overflow: visible !important;
 }
 
 .brand-mark img {
-  width: 44px;
-  height: 44px;
+  width: 150px !important;   /* change this number */
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
   object-fit: contain;
+  border-radius: 0 !important;
+  background: transparent !important;
 }
 
 .brand-text {
@@ -433,8 +437,8 @@ button {
 }
 
 .brand-mark img {
-  width: 150px !important;
-  height: 100 !important;
+  width: 150px !important;   /* change this number */
+  height: auto !important;
   max-width: none !important;
   max-height: none !important;
   object-fit: contain;
