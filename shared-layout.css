@@ -505,8 +505,9 @@ button {
 }
 
 .drop-btn::after {
-  margin-left: 4px;
-  font-size: 10px;
+  margin-left: 6px;
+  font-size: 16px !important;
+  font-weight: 700;
 }
 
 .dropdown-menu {
