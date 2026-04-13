@@ -598,10 +598,6 @@
   justify-content: center;
 }
 
-.about-arrow {
-  display: none !important;
-}
-
 
 .about-inner {
   width: 100%;
@@ -1464,22 +1460,27 @@ function renderAgent(index) {
   });
 }
 
-
-    
 function setupAgentSlider() {
+  const prevBtn = document.querySelector('.about-arrow[aria-label="Previous"]');
+  const nextBtn = document.querySelector('.about-arrow[aria-label="Next"]');
+  
+  if (!prevBtn || !nextBtn) return;
+
+  prevBtn.addEventListener("click", () => {
+    currentAgentIndex = (currentAgentIndex - 1 + agents.length) % agents.length;
+    renderAgent(currentAgentIndex);
+  });
+
+  nextBtn.addEventListener("click", () => {
+    currentAgentIndex = (currentAgentIndex + 1) % agents.length;
+    renderAgent(currentAgentIndex);
+  });
+
   renderAgent(currentAgentIndex);
 }
 
-function startAgentAutoSlide() {
-  setInterval(() => {
-    currentAgentIndex = (currentAgentIndex + 1) % agents.length;
-    renderAgent(currentAgentIndex);
-  }, 3000); // change 3000 to 4000 or 5000 if you want slower
-}
     
 setupAgentSlider();
-startAgentAutoSlide();
-    
 // 🚀 USE FIREBASE INSTEAD OF STATIC DATA
 loadListingsFromFirebase();
 
