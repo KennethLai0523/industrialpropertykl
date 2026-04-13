@@ -446,46 +446,55 @@ button {
     min-width: 0;
   }
 
-  .nav-links {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    margin: 6px 0 0;
-    padding: 0;
-    list-style: none;
-    align-items: start;
-    width: 100%;
-  }
+.nav-shell,
+.nav,
+.topbar,
+.nav-links {
+  overflow: visible !important;
+}
 
-  .nav-links > li {
-    width: 100%;
-    min-width: 0;
-    align-self: start;
-  }
-
-  .nav-link,
-  .drop-btn {
-    width: 100%;
-    min-height: 44px;
-    justify-content: center;
-    text-align: center;
-    padding: 10px 8px;
-    font-size: 13px;
-    line-height: 1.2;
-    border: 1px solid rgba(17,17,17,0.12);
-    border-radius: 10px;
-    background: rgba(255,255,255,0.18);
-    white-space: normal;
-    word-break: break-word;
-  }
-
-  .drop-btn::after {
-    margin-left: 4px;
-    font-size: 10px;
-  }
+.nav-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  align-items: start;
+  width: 100%;
+}
 
 .nav-links > li {
+  width: 100%;
+  min-width: 0;
+  align-self: start;
   position: relative;
+}
+
+.dropdown {
+  position: relative;
+  z-index: 50;
+}
+
+.nav-link,
+.drop-btn {
+  width: 100%;
+  min-height: 44px;
+  justify-content: center;
+  text-align: center;
+  padding: 10px 8px;
+  font-size: 13px;
+  line-height: 1.2;
+  border: 1px solid rgba(17,17,17,0.12);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.18);
+  white-space: normal;
+  word-break: break-word;
+}
+
+.drop-btn::after {
+  margin-left: 4px;
+  font-size: 10px;
 }
 
 .dropdown-menu {
@@ -494,14 +503,15 @@ button {
   left: 0;
   width: 100%;
   min-width: 100%;
+  margin-top: 0 !important;
 
-  background: #e8b95a;
+  background: #e8c46a;
   border-top: none;
   box-shadow: 0 12px 24px rgba(0,0,0,0.12);
 
-  opacity: 1;
-  visibility: visible;
-  transform: none;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
   display: none;
 
   border-radius: 10px;
@@ -509,23 +519,24 @@ button {
   z-index: 999;
 }
 
-  .dropdown.open .dropdown-menu,
-  .dropdown:focus-within .dropdown-menu {
-    display: block;
-  }
+.dropdown.open .dropdown-menu,
+.dropdown:focus-within .dropdown-menu {
+  display: block;
+}
 
-  .dropdown-menu a {
-    display: block;
-    padding: 12px 14px;
-    font-size: 13px;
-    border-bottom: 1px solid rgba(255,255,255,0.35);
-    white-space: normal;
-    word-break: break-word;
-  }
+.dropdown-menu a {
+  display: block;
+  padding: 12px 14px;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  white-space: normal;
+  word-break: break-word;
+  background: #e8c46a;
+}
 
-  .dropdown-menu a:last-child {
-    border-bottom: none;
-  }
+.dropdown-menu a:last-child {
+  border-bottom: none;
+}
 
   .hero,
   .banner,
