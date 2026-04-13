@@ -433,8 +433,8 @@ button {
 }
 
 .brand-mark img {
-  width: 120px !important;
-  height: auto !important;
+  width: 150px !important;
+  height: 100 !important;
   max-width: none !important;
   max-height: none !important;
   object-fit: contain;
