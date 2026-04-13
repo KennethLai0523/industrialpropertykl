@@ -494,8 +494,8 @@ button {
   min-height: 44px;
   justify-content: center;
   text-align: center;
-  padding: 10px 8px;
-  font-size: 13px;
+  padding: 8px 6px;
+  font-size: 12px;
   line-height: 1.2;
   border: 1px solid rgba(17,17,17,0.12);
   border-radius: 10px;
