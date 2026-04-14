@@ -94,13 +94,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyANrifzDiBgsM8MpFSbe-kxW_e89vKbCZ8",
@@ -114,38 +108,38 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-function slugify(text) {
-  return (text || "")
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
+function getProjectId() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("id");
 }
 
 async function loadProject() {
   try {
-    const currentPage = window.location.pathname.split("/").pop().replace(".html", "");
-    const pageSlug = slugify(currentPage);
+    const id = getProjectId();
 
-    const q = query(
-      collection(db, "projects"),
-      where("slug", "==", pageSlug)
-    );
-
-    const snapshot = await getDocs(q);
-
-    if (snapshot.empty) {
+    if (!id) {
       document.querySelector(".container").innerHTML = `
         <div class="section">
           <h2>Project not found</h2>
-          <p>No project matched this page slug: ${pageSlug}</p>
+          <p>Missing project id in URL.</p>
         </div>
       `;
       return;
     }
 
-    const data = snapshot.docs[0].data();
+    const snap = await getDoc(doc(db, "projects", id));
+
+    if (!snap.exists()) {
+      document.querySelector(".container").innerHTML = `
+        <div class="section">
+          <h2>Project not found</h2>
+          <p>No project record found for this id.</p>
+        </div>
+      `;
+      return;
+    }
+
+    const data = snap.data();
 
     document.getElementById("title").innerText = data.title || "";
     document.getElementById("location").innerText = data.location || "";
@@ -161,8 +155,8 @@ async function loadProject() {
     const gallery = document.getElementById("gallery");
     gallery.innerHTML = "";
 
-    if (Array.isArray(data.galleryImages)) {
-      data.galleryImages.forEach(img => {
+    if (Array.isArray(data.galleryImages) && data.galleryImages.length > 0) {
+      data.galleryImages.forEach((img) => {
         const image = document.createElement("img");
         image.src = img;
         image.alt = data.title || "Project image";
@@ -170,11 +164,11 @@ async function loadProject() {
       });
     }
   } catch (error) {
-    console.error(error);
+    console.error("Project detail error:", error);
     document.querySelector(".container").innerHTML = `
       <div class="section">
         <h2>Error loading project</h2>
-        <p>Please check console and Firebase query.</p>
+        <p>Please check browser console.</p>
       </div>
     `;
   }
