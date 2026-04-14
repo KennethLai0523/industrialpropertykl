@@ -117,8 +117,8 @@ function setupSharedHeaderFooter() {
 }
 
 async function initSharedLayout() {
-await loadSharedSection("site-header", "header.html?v=2");
-await loadSharedSection("site-footer", "footer.html?v=2");
+await loadSharedSection("site-header", "header.html?v=3");
+await loadSharedSection("site-footer", "footer.html?v=3");
   await loadProjectsDropdown();
   setupSharedHeaderFooter();
 }
