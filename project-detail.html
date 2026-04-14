@@ -94,7 +94,13 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyANrifzDiBgsM8MpFSbe-kxW_e89vKbCZ8",
@@ -108,43 +114,69 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-function getId() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("id");
+function slugify(text) {
+  return (text || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
 }
 
 async function loadProject() {
-  const id = getId();
-  if (!id) return;
+  try {
+    const currentPage = window.location.pathname.split("/").pop().replace(".html", "");
+    const pageSlug = slugify(currentPage);
 
-  const ref = doc(db, "projects", id);
-  const snap = await getDoc(ref);
+    const q = query(
+      collection(db, "projects"),
+      where("slug", "==", pageSlug)
+    );
 
-  if (!snap.exists()) {
-    document.body.innerHTML = "Project not found";
-    return;
-  }
+    const snapshot = await getDocs(q);
 
-  const data = snap.data();
+    if (snapshot.empty) {
+      document.querySelector(".container").innerHTML = `
+        <div class="section">
+          <h2>Project not found</h2>
+          <p>No project matched this page slug: ${pageSlug}</p>
+        </div>
+      `;
+      return;
+    }
 
-  document.getElementById("title").innerText = data.title;
-  document.getElementById("location").innerText = data.location;
-  document.getElementById("shortDescription").innerText = data.shortDescription;
-  document.getElementById("fullContent").innerText = data.fullContent;
+    const data = snapshot.docs[0].data();
 
-  // Hero image
-  const hero = document.getElementById("hero");
-  hero.style.backgroundImage = `url('${data.coverImage}')`;
-  hero.innerText = data.title;
+    document.getElementById("title").innerText = data.title || "";
+    document.getElementById("location").innerText = data.location || "";
+    document.getElementById("shortDescription").innerText = data.shortDescription || "";
+    document.getElementById("fullContent").innerText = data.fullContent || "";
 
-  // Gallery
-  const gallery = document.getElementById("gallery");
-  if (data.galleryImages) {
-    data.galleryImages.forEach(img => {
-      const image = document.createElement("img");
-      image.src = img;
-      gallery.appendChild(image);
-    });
+    const hero = document.getElementById("hero");
+    if (data.coverImage) {
+      hero.style.backgroundImage = `url('${data.coverImage}')`;
+    }
+    hero.innerText = data.title || "";
+
+    const gallery = document.getElementById("gallery");
+    gallery.innerHTML = "";
+
+    if (Array.isArray(data.galleryImages)) {
+      data.galleryImages.forEach(img => {
+        const image = document.createElement("img");
+        image.src = img;
+        image.alt = data.title || "Project image";
+        gallery.appendChild(image);
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    document.querySelector(".container").innerHTML = `
+      <div class="section">
+        <h2>Error loading project</h2>
+        <p>Please check console and Firebase query.</p>
+      </div>
+    `;
   }
 }
 
