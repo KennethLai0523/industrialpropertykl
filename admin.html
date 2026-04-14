@@ -454,7 +454,7 @@
 
 <div class="tab-panel" id="projectsTab">
   <div class="card">
-    <h2>Add Project</h2>
+    <h2 id="projectFormTitle">Add Project</h2>
     <div class="section-note">
       Use this to create new industrial projects and launch pages.
     </div>
@@ -576,7 +576,7 @@
       appId: "1:612612953532:web:94f956f783cb948db887b9",
       measurementId: "G-ML49L4TQ29"
     };
-
+    const projectFormTitle = document.getElementById("projectFormTitle");
     const projectList = document.getElementById("projectList");
 
     const app = initializeApp(firebaseConfig);
@@ -624,6 +624,9 @@
     const saveProjectBtn = document.getElementById("saveProjectBtn");
     const projectStatus = document.getElementById("projectStatus");
 
+let editingProjectId = null;
+let existingProjectCoverImage = "";
+let existingProjectGalleryImages = [];
     let selectedFile = null;
     let selectedAgentFile = null;
     let selectedGalleryFiles = [];
@@ -732,6 +735,35 @@
       };
       reader.readAsDataURL(file);
     }
+
+function setProjectEditMode(item, id) {
+  editingProjectId = id;
+  existingProjectCoverImage = item.coverImage || "";
+  existingProjectGalleryImages = Array.isArray(item.galleryImages) ? item.galleryImages : [];
+
+  projectTitle.value = item.title || "";
+  projectLocation.value = item.location || "";
+  projectShort.value = item.shortDescription || "";
+  projectContent.value = item.fullContent || "";
+
+  projectCoverInput.value = "";
+  projectGalleryInput.value = "";
+
+  projectStatus.textContent = "Editing project. Change fields and click Save Project.";
+  projectStatus.style.color = "#8a6500";
+
+projectFormTitle.textContent = "Edit Project";
+saveProjectBtn.textContent = "Update Project";
+
+  document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+  document.querySelectorAll(".tab-panel").forEach(panel => panel.classList.remove("active"));
+  document.querySelector('[data-tab="projectsTab"]').classList.add("active");
+  document.getElementById("projectsTab").classList.add("active");
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+
+}
 
     function handleSelectedBlogFile(file) {
       if (!file) return;
@@ -1122,27 +1154,34 @@ async function loadProjects() {
       const row = document.createElement("div");
       row.className = "listing-row";
 
-      row.innerHTML = `
-        <img src="${item.coverImage || ""}" 
-             onerror="this.style.background='#f3f3f3'" />
+row.innerHTML = `
+  <img src="${item.coverImage || ""}" 
+       alt="${item.title || "Project"}"
+       onerror="this.src=''; this.style.background='#f3f3f3';" />
 
-        <div>
-          <div class="listing-title">${item.title}</div>
-          <div class="listing-meta">
-            ${item.location}<br>
-            ${item.shortDescription}<br>
-            ${formatPostedDate(item.createdAt)}
-          </div>
-        </div>
+  <div>
+    <div class="listing-title">${item.title || "-"}</div>
+    <div class="listing-meta">
+      ${item.location || "-"}<br>
+      ${item.shortDescription || "-"}<br>
+      ${formatPostedDate(item.createdAt)}
+    </div>
+  </div>
 
-        <div class="listing-actions">
-          <a class="btn btn-sm btn-green" 
-             href="project-detail.html?id=${docSnap.id}" 
-             target="_blank">
-             View
-          </a>
-        </div>
-      `;
+  <div class="listing-actions">
+    <button class="btn btn-sm btn-light project-edit-btn">Edit</button>
+    <a class="btn btn-sm btn-green" 
+       href="project-detail.html?id=${docSnap.id}" 
+       target="_blank"
+       style="text-decoration:none; text-align:center;">
+       View
+    </a>
+  </div>
+`;
+
+row.querySelector(".project-edit-btn").addEventListener("click", () => {
+  setProjectEditMode(item, docSnap.id);
+});
 
       projectList.appendChild(row);
     });
@@ -1275,76 +1314,104 @@ async function loadProjects() {
       }
     }
 
-    async function saveProject() {
-      const title = projectTitle.value.trim();
-      const location = projectLocation.value.trim();
-      const shortDescription = projectShort.value.trim();
-      const fullContent = projectContent.value.trim();
-    
-      if (!title || !location || !shortDescription || !fullContent) {
-        projectStatus.textContent = "Please fill in title, location, short description and full content.";
-        projectStatus.style.color = "red";
-        return;
-      }
-    
-      if (!projectCoverInput.files[0]) {
-        projectStatus.textContent = "Please choose one project cover image.";
-        projectStatus.style.color = "red";
-        return;
-      }
-    
-      saveProjectBtn.disabled = true;
-      projectStatus.textContent = "Saving project...";
-      projectStatus.style.color = "#333";
-    
-      try {
-        projectStatus.textContent = "Uploading cover image...";
-        
-        const coverImage = await uploadImage(
-          projectCoverInput.files[0],
-          "project-cover",
-          title,
-          projectStatus
-        );
-    
-        projectStatus.textContent = "Uploading gallery images...";
-        
-        const galleryImages = await uploadProjectGalleryImages(
-          Array.from(projectGalleryInput.files || []),
-          title
-        );
-    
-        await addDoc(collection(db, "projects"), {
-          title,
-          slug: slugify(title),
-          location,
-          shortDescription,
-          fullContent,
-          coverImage,
-          galleryImages,
-          status: "published",
-          createdAt: Date.now(),
-          updatedAt: Date.now()
-        });
-    
-        projectTitle.value = "";
-        projectLocation.value = "";
-        projectShort.value = "";
-        projectContent.value = "";
-        projectCoverInput.value = "";
-        projectGalleryInput.value = "";
-    
-        projectStatus.textContent = "Project saved successfully.";
-        projectStatus.style.color = "green";
-        await loadProjects();
-      } catch (error) {
-        console.error(error);
-        projectStatus.textContent = "Failed to save project. Check Storage rules and setup.";
-        projectStatus.style.color = "red";
-      } finally {
-        saveProjectBtn.disabled = false;
+async function saveProject() {
+  const title = projectTitle.value.trim();
+  const location = projectLocation.value.trim();
+  const shortDescription = projectShort.value.trim();
+  const fullContent = projectContent.value.trim();
+
+  if (!title || !location || !shortDescription || !fullContent) {
+    projectStatus.textContent = "Please fill in title, location, short description and full content.";
+    projectStatus.style.color = "red";
+    return;
+  }
+
+  if (!editingProjectId && !projectCoverInput.files[0]) {
+    projectStatus.textContent = "Please choose one project cover image.";
+    projectStatus.style.color = "red";
+    return;
+  }
+
+  saveProjectBtn.disabled = true;
+  projectStatus.textContent = editingProjectId ? "Updating project..." : "Saving project...";
+  projectStatus.style.color = "#333";
+
+  try {
+    let finalCoverImage = existingProjectCoverImage;
+    let finalGalleryImages = [...existingProjectGalleryImages];
+    let createdAt = Date.now();
+
+    if (editingProjectId) {
+      const existingSnap = await getDoc(doc(db, "projects", editingProjectId));
+      if (existingSnap.exists()) {
+        createdAt = existingSnap.data().createdAt || Date.now();
       }
     }
+
+    if (projectCoverInput.files[0]) {
+      finalCoverImage = await uploadImage(
+        projectCoverInput.files[0],
+        "project-cover",
+        title,
+        projectStatus
+      );
+    }
+
+    if (projectGalleryInput.files.length > 0) {
+      finalGalleryImages = await uploadProjectGalleryImages(
+        Array.from(projectGalleryInput.files),
+        title
+      );
+    }
+
+    const payload = {
+      title,
+      slug: slugify(title),
+      location,
+      shortDescription,
+      fullContent,
+      coverImage: finalCoverImage,
+      galleryImages: finalGalleryImages,
+      status: "published",
+      createdAt,
+      updatedAt: Date.now()
+    };
+
+    if (editingProjectId) {
+      await updateDoc(doc(db, "projects", editingProjectId), payload);
+      projectStatus.textContent = "Project updated successfully.";
+    } else {
+      await addDoc(collection(db, "projects"), payload);
+      projectStatus.textContent = "Project saved successfully.";
+    }
+
+    projectStatus.style.color = "green";
+
+    editingProjectId = null;
+    existingProjectCoverImage = "";
+    existingProjectGalleryImages = [];
+
+    projectTitle.value = "";
+    projectLocation.value = "";
+    projectShort.value = "";
+    projectContent.value = "";
+    projectCoverInput.value = "";
+    projectGalleryInput.value = "";
+
+    await loadProjects();
+
+projectFormTitle.textContent = "Add Project";
+saveProjectBtn.textContent = "Save Project";
+  } catch (error) {
+    console.error(error);
+    projectStatus.textContent = "Failed to save project. Check Storage rules and setup.";
+    projectStatus.style.color = "red";
+  } finally {
+    saveProjectBtn.disabled = false;
+  }
+
+
+}
 
     function setupTabs() {
       const tabButtons = document.querySelectorAll(".tab-btn");
