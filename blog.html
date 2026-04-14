@@ -384,27 +384,32 @@ const firebaseConfig = {
       blogGrid.innerHTML = "";
 
       try {
-        const q = query(
-          collection(db, "blogs"),
-          where("status", "==", "published"),
-          orderBy("createdAt", "desc")
-        );
-
-        const snapshot = await getDocs(q);
-
-        if (snapshot.empty) {
-          blogCount.textContent = "0 posts";
-          emptyState.style.display = "block";
-          return;
-        }
-
-        const cards = [];
+        const snapshot = await getDocs(collection(db, "blogs"));
+        
+        const docs = [];
         snapshot.forEach((doc) => {
-          cards.push(createBlogCard(doc.id, doc.data()));
+          const data = doc.data();
+          if ((data.status || "").toLowerCase() === "published") {
+            docs.push({
+              id: doc.id,
+              ...data
+            });
+          }
         });
+        
+        docs.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
-        blogGrid.innerHTML = cards.join("");
-        blogCount.textContent = `${snapshot.size} post${snapshot.size > 1 ? "s" : ""}`;
+      if (!docs.length) {
+        blogCount.textContent = "0 posts";
+        emptyState.style.display = "block";
+        return;
+      }
+      
+      const cards = docs.map((item) => createBlogCard(item.id, item));
+      
+      blogGrid.innerHTML = cards.join("");
+      blogCount.textContent = `${docs.length} post${docs.length > 1 ? "s" : ""}`;  
+        
       } catch (error) {
         console.error("Error loading blogs:", error);
         blogCount.textContent = "Unable to load posts";
