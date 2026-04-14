@@ -452,33 +452,38 @@
       </div>
     </div>
 
-    <div class="tab-panel" id="projectsTab">
-      <div class="card">
-        <h2>Add Project</h2>
-        <div class="section-note">
-          Use this to create new industrial projects and launch pages.
-        </div>
-    
-        <input id="projectTitle" placeholder="Project Title" />
-        <input id="projectLocation" placeholder="Location" />
-    
-        <textarea id="projectShort" placeholder="Short Description"></textarea>
-        <textarea id="projectContent" class="editor-large" placeholder="Full Content"></textarea>
-    
-        <h3 class="subsection-title">Project Cover Image</h3>
-        <input type="file" id="projectCoverInput" accept="image/*" />
-    
-        <h3 class="subsection-title">Project Gallery Images</h3>
-        <input type="file" id="projectGalleryInput" accept="image/*" multiple />
-        <div class="gallery-note">Choose multiple images for the project gallery.</div>
-    
-        <div class="inline-actions">
-          <button class="btn" id="saveProjectBtn" type="button">Save Project</button>
-        </div>
-    
-        <div class="status-text" id="projectStatus"></div>
-      </div>
+<div class="tab-panel" id="projectsTab">
+  <div class="card">
+    <h2>Add Project</h2>
+    <div class="section-note">
+      Use this to create new industrial projects and launch pages.
     </div>
+
+    <input id="projectTitle" placeholder="Project Title" />
+    <input id="projectLocation" placeholder="Location" />
+
+    <textarea id="projectShort" placeholder="Short Description"></textarea>
+    <textarea id="projectContent" class="editor-large" placeholder="Full Content"></textarea>
+
+    <h3 class="subsection-title">Project Cover Image</h3>
+    <input type="file" id="projectCoverInput" accept="image/*" />
+
+    <h3 class="subsection-title">Project Gallery Images</h3>
+    <input type="file" id="projectGalleryInput" accept="image/*" multiple />
+
+    <div class="inline-actions">
+      <button class="btn" id="saveProjectBtn" type="button">Save Project</button>
+    </div>
+
+    <div class="status-text" id="projectStatus"></div>
+  </div>
+
+  <!-- 🔥 ADD THIS -->
+  <div class="card">
+    <h2>All Projects</h2>
+    <div class="listings-wrap" id="projectList"></div>
+  </div>
+</div>
 
     <div class="tab-panel" id="blogTab">
       <div class="card">
@@ -571,6 +576,8 @@
       appId: "1:612612953532:web:94f956f783cb948db887b9",
       measurementId: "G-ML49L4TQ29"
     };
+
+    const projectList = document.getElementById("projectList");
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -1096,6 +1103,56 @@
       }
     }
 
+async function loadProjects() {
+  projectList.innerHTML = "Loading...";
+
+  try {
+    const q = query(collection(db, "projects"), orderBy("createdAt", "desc"));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      projectList.innerHTML = "<div class='muted'>No projects yet.</div>";
+      return;
+    }
+
+    projectList.innerHTML = "";
+
+    snapshot.forEach((docSnap) => {
+      const item = docSnap.data();
+      const row = document.createElement("div");
+      row.className = "listing-row";
+
+      row.innerHTML = `
+        <img src="${item.coverImage || ""}" 
+             onerror="this.style.background='#f3f3f3'" />
+
+        <div>
+          <div class="listing-title">${item.title}</div>
+          <div class="listing-meta">
+            ${item.location}<br>
+            ${item.shortDescription}<br>
+            ${formatPostedDate(item.createdAt)}
+          </div>
+        </div>
+
+        <div class="listing-actions">
+          <a class="btn btn-sm btn-green" 
+             href="project-detail.html?id=${docSnap.id}" 
+             target="_blank">
+             View
+          </a>
+        </div>
+      `;
+
+      projectList.appendChild(row);
+    });
+
+  } catch (error) {
+    console.error(error);
+    projectList.innerHTML = "<div class='muted'>Failed to load projects.</div>";
+  }
+}
+
     async function saveListing() {
       const title = getField("title");
       const price = getField("price");
@@ -1279,6 +1336,7 @@
     
         projectStatus.textContent = "Project saved successfully.";
         projectStatus.style.color = "green";
+        await loadProjects();
       } catch (error) {
         console.error(error);
         projectStatus.textContent = "Failed to save project. Check Storage rules and setup.";
@@ -1305,14 +1363,15 @@
       });
     }
 
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "login.html";
-      } else {
-        loadListings();
-        loadBlogs();
-      }
-    });
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+  } else {
+    loadListings();
+    loadBlogs();
+    loadProjects(); // 🔥 THIS LINE
+  }
+});
 
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
