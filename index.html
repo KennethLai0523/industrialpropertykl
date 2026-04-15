@@ -1226,7 +1226,7 @@ function renderListings(items) {
   listingGrid.style.display = 'grid';
 
   const visibleItems = items.slice(0, visibleCount);
-  resultsCount.textContent = `Showing ${visibleItems.length} of ${items.length} listing${items.length > 1 ? 's' : ''}`;
+  resultsCount.textContent = `Showing ${visibleItems.length} / ${items.length} listings`;
 
   visibleItems.forEach((item) => {
     const realIndex = listings.findIndex(listing => listing.id === item.id);
