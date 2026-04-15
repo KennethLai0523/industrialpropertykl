@@ -453,7 +453,7 @@ ${data.googleMapsLink ? `
       loading="lazy"
       allowfullscreen
       referrerpolicy="no-referrer-when-downgrade"
-      src="https://www.google.com/maps?q=${encodeURIComponent(data.googleMapsLink)}&output=embed">
+      src="https://www.google.com/maps?q=${encodeURIComponent(data.address || data.location)}&output=embed">
     </iframe>
   </div>
 ` : ""}
