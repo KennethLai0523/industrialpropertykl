@@ -1069,6 +1069,13 @@
 
         <div class="listings" id="listingGrid"></div>
         <div class="empty-state" id="emptyState">No matching listings found. Try another keyword, city or status.</div>
+
+<div style="text-align:center; margin-top:28px;">
+  <button id="loadMoreBtn" type="button" class="btn-primary" style="display:none; padding:12px 24px; cursor:pointer;">
+    Load More
+  </button>
+</div>
+        
       </div>
     </section>
 
@@ -1184,6 +1191,9 @@
   <script type="module" src="shared-layout.js?v=12"></script>
   <script type="module">
     let listings = [];
+let filteredListings = [];
+let visibleCount = 6;
+const LOAD_STEP = 6;
 
     function generateLink(title) {
       return '/' + title.toLowerCase()
@@ -1200,80 +1210,93 @@
     const statusFilter = document.getElementById('statusFilter');
     const searchBtn = document.getElementById('searchBtn');
 
-    function renderListings(items) {
-      listingGrid.innerHTML = '';
+function renderListings(items) {
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+  listingGrid.innerHTML = '';
 
-      if (!items.length) {
-        emptyState.style.display = 'block';
-        listingGrid.style.display = 'none';
-        resultsCount.textContent = 'Showing 0 listings';
-        return;
-      }
+  if (!items.length) {
+    emptyState.style.display = 'block';
+    listingGrid.style.display = 'none';
+    resultsCount.textContent = 'Showing 0 listings';
+    loadMoreBtn.style.display = 'none';
+    return;
+  }
 
-      emptyState.style.display = 'none';
-      listingGrid.style.display = 'grid';
-      resultsCount.textContent = `Showing ${items.length} listing${items.length > 1 ? 's' : ''}`;
+  emptyState.style.display = 'none';
+  listingGrid.style.display = 'grid';
 
-      items.forEach((item, index) => {
-        const card = document.createElement('article');
-        card.className = 'listing-card';
-        card.innerHTML = `
-          <div class="listing-image" style="background-image:url('${item.image}')">
-            <span class="listing-tag">${item.status}</span>
-            <div class="image-actions">
-              <button class="image-btn" onclick="addToCompare(${index})" style="width:auto;padding:0 10px;font-size:12px;">Compare</button>
-              <button class="image-btn" onclick="saveProperty(${index})">♡</button>
-            </div>
-          </div>
-          <div class="listing-body">
-            <div class="listing-price">${item.price}</div>
-            <h3 class="listing-title">${item.title}</h3>
-            <p class="listing-location">${item.location}, ${item.state}</p>
-            <p class="listing-meta"><strong>Built-up:</strong> ${item.bua || "-"}</p>
-            <p class="listing-meta"><strong>Type:</strong> ${item.type || "-"}</p>
-            <div class="agent-row">
-              <img
-                class="agent-avatar"
-                src="${item.agentImage || 'images/default-agent.png'}"
-                alt="${item.agentName || 'Agent'}"
-                onerror="this.src='images/default-agent.png'"
-              />
-              <span class="agent-name">${item.agentName || "Kenneth Lai"}</span>
-              <span class="agent-dot">•</span>
-              <span>${formatPostedDate(item.postedAt)}</span>
-            </div>
-            <div class="listing-actions">
-              <a class="btn-wa" href="https://wa.me/60166287357?text=${encodeURIComponent('Hi Kenneth, I am interested in ' + item.title + ' at ' + item.location + '.')}" target="_blank">WhatsApp</a>
-              <a class="btn-primary" href="detail.html?id=${item.id}">Details</a>
-            </div>
-          </div>
-        `;
-        listingGrid.appendChild(card);
-      });
-    }
+  const visibleItems = items.slice(0, visibleCount);
+  resultsCount.textContent = `Showing ${visibleItems.length} of ${items.length} listing${items.length > 1 ? 's' : ''}`;
 
-    function applyFilters() {
-      const keyword = keywordFilter.value.trim().toLowerCase();
-      const state = stateFilter.value;
-      const city = cityFilter.value;
-      const status = statusFilter.value;
+  visibleItems.forEach((item) => {
+    const realIndex = listings.findIndex(listing => listing.id === item.id);
 
-      const filtered = listings.filter(item => {
-        const haystack = [item.title, item.location, item.state, item.city, item.type, item.description]
-          .join(' ')
-          .toLowerCase();
+    const card = document.createElement('article');
+    card.className = 'listing-card';
+    card.innerHTML = `
+      <div class="listing-image" style="background-image:url('${item.image}')">
+        <span class="listing-tag">${item.status}</span>
+        <div class="image-actions">
+          <button class="image-btn" onclick="addToCompare(${realIndex})" style="width:auto;padding:0 10px;font-size:12px;">Compare</button>
+          <button class="image-btn" onclick="saveProperty(${realIndex})">♡</button>
+        </div>
+      </div>
+      <div class="listing-body">
+        <div class="listing-price">${item.price}</div>
+        <h3 class="listing-title">${item.title}</h3>
+        <p class="listing-location">${item.location}, ${item.state}</p>
+        <p class="listing-meta"><strong>Built-up:</strong> ${item.bua || "-"}</p>
+        <p class="listing-meta"><strong>Type:</strong> ${item.type || "-"}</p>
+        <div class="agent-row">
+          <img
+            class="agent-avatar"
+            src="${item.agentImage || 'images/default-agent.png'}"
+            alt="${item.agentName || 'Agent'}"
+            onerror="this.src='images/default-agent.png'"
+          />
+          <span class="agent-name">${item.agentName || "Kenneth Lai"}</span>
+          <span class="agent-dot">•</span>
+          <span>${formatPostedDate(item.postedAt)}</span>
+        </div>
+        <div class="listing-actions">
+          <a class="btn-wa" href="https://wa.me/60166287357?text=${encodeURIComponent('Hi Kenneth, I am interested in ' + item.title + ' at ' + item.location + '.')}" target="_blank">WhatsApp</a>
+          <a class="btn-primary" href="detail.html?id=${item.id}">Details</a>
+        </div>
+      </div>
+    `;
+    listingGrid.appendChild(card);
+  });
 
-        const matchKeyword = !keyword || haystack.includes(keyword);
-        const matchState = !state || item.state === state;
-        const matchCity = !city || item.city === city;
-        const matchStatus = !status || item.status === status;
+  if (visibleCount < items.length) {
+    loadMoreBtn.style.display = 'inline-block';
+  } else {
+    loadMoreBtn.style.display = 'none';
+  }
+}
 
-        return matchKeyword && matchState && matchCity && matchStatus;
-      });
+function applyFilters() {
+  const keyword = keywordFilter.value.trim().toLowerCase();
+  const state = stateFilter.value;
+  const city = cityFilter.value;
+  const status = statusFilter.value;
 
-      renderListings(filtered);
-      document.getElementById('listings').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  filteredListings = listings.filter(item => {
+    const haystack = [item.title, item.location, item.state, item.city, item.type, item.description]
+      .join(' ')
+      .toLowerCase();
+
+    const matchKeyword = !keyword || haystack.includes(keyword);
+    const matchState = !state || item.state === state;
+    const matchCity = !city || item.city === city;
+    const matchStatus = !status || item.status === status;
+
+    return matchKeyword && matchState && matchCity && matchStatus;
+  });
+
+  visibleCount = LOAD_STEP;
+  renderListings(filteredListings);
+  document.getElementById('listings').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
     searchBtn.addEventListener('click', applyFilters);
     keywordFilter.addEventListener('keydown', function (e) {
@@ -1282,16 +1305,19 @@
 
     document.addEventListener('click', function (e) {
       const typeLink = e.target.closest('[data-type-link]');
-      if (typeLink) {
-        document.getElementById('statusFilter').value = '';
-        document.getElementById('stateFilter').value = '';
-        document.getElementById('cityFilter').value = '';
-        document.getElementById('keywordFilter').value = '';
-    
-        const targetType = typeLink.getAttribute('data-type-link');
-        renderListings(listings.filter(item => item.type === targetType));
-        return;
-      }
+if (typeLink) {
+  document.getElementById('statusFilter').value = '';
+  document.getElementById('stateFilter').value = '';
+  document.getElementById('cityFilter').value = '';
+  document.getElementById('keywordFilter').value = '';
+
+  const targetType = typeLink.getAttribute('data-type-link');
+
+  filteredListings = listings.filter(item => item.type === targetType);
+  visibleCount = LOAD_STEP;
+  renderListings(filteredListings);
+  return;
+}
     
       const keywordLink = e.target.closest('[data-keyword-link]');
       if (keywordLink) {
@@ -1300,6 +1326,11 @@
         applyFilters();
       }
     });
+
+document.getElementById('loadMoreBtn').addEventListener('click', function () {
+  visibleCount += LOAD_STEP;
+  renderListings(filteredListings);
+});
 
     let compareList = [];
 let savedProperties = [];
@@ -1432,8 +1463,10 @@ async function loadListingsFromFirebase() {
     });
   });
 
-  listings = firebaseListings;
-  renderListings(listings);
+listings = firebaseListings;
+filteredListings = firebaseListings;
+visibleCount = LOAD_STEP;
+renderListings(filteredListings);
 }
 
 const agents = [
