@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin Panel | Residential Property KL</title>
+  <title>Admin Panel | Industrial Property KL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * { box-sizing: border-box; }
@@ -348,7 +348,7 @@
       <div class="card">
         <h2 id="formTitle">Add Listing</h2>
         <div class="section-note">
-          Use this for residential property listings (sale or rent).
+          Use this for industrial, commercial, subsale or rent property listings.
         </div>
 
         <div id="editBanner" class="edit-banner">
@@ -361,16 +361,13 @@
         <option value="rent">For Rent</option>
       </select>
     
-<select id="type">
-  <option value="Condominium">Condominium</option>
-  <option value="Apartment">Apartment</option>
-  <option value="Serviced Residence">Serviced Residence</option>
-  <option value="Terrace House">Terrace House</option>
-  <option value="Semi-Detached House">Semi-Detached House</option>
-  <option value="Bungalow">Bungalow</option>
-  <option value="Penthouse">Penthouse</option>
-  <option value="Studio">Studio</option>
-</select>
+      <select id="type">
+        <option value="Detached Factory">Detached Factory</option>
+        <option value="Semi-Detached Factory">Semi-Detached Factory</option>
+        <option value="Link Factory">Link Factory</option>
+        <option value="Warehouse">Warehouse</option>
+        <option value="Industrial Land">Industrial Land</option>
+      </select>
     </div>
     
     <input id="title" placeholder="Title" />
@@ -394,16 +391,11 @@
           <input id="tenure" placeholder="Tenure (Freehold / Leasehold)" />
         </div>
 
-<div class="grid-3">
-  <input id="bedrooms" placeholder="Bedrooms" />
-  <input id="bathrooms" placeholder="Bathrooms" />
-  <input id="carparks" placeholder="Car Parks" />
-</div>
-
-<div class="grid-2">
-  <input id="furnishing" placeholder="Furnishing (Fully / Partial / Unfurnished)" />
-  <input id="facilities" placeholder="Facilities (Pool, Gym, Guarded, etc)" />
-</div>
+        <div class="grid-3">
+          <input id="powerSupply" placeholder="Power Supply (e.g. 150 AMP)" />
+          <input id="ceilingHeight" placeholder="Ceiling Height (e.g. 30 ft)" />
+          <input id="floorLoading" placeholder="Floor Loading (e.g. 3 ton/m²)" />
+        </div>
 
         <input id="features" placeholder="Features (comma separated or normal sentence)" />
         <input id="googleMapsLink" placeholder="Google Maps Link" />
@@ -857,7 +849,7 @@ saveProjectBtn.textContent = "Update Project";
 
       return {
         contentType: "listing",
-        category: "residential",
+        category: "industrial",
         listingType: document.getElementById("listingType").value,
         title,
         slug: slugify(title),
@@ -870,11 +862,9 @@ saveProjectBtn.textContent = "Update Project";
         bua: getField("bua"),
         landArea: getField("landArea"),
         tenure: getField("tenure"),
-bedrooms: getField("bedrooms"),
-bathrooms: getField("bathrooms"),
-carparks: getField("carparks"),
-furnishing: getField("furnishing"),
-facilities: getField("facilities"),
+        powerSupply: getField("powerSupply"),
+        ceilingHeight: getField("ceilingHeight"),
+        floorLoading: getField("floorLoading"),
         features: getField("features"),
         googleMapsLink: getField("googleMapsLink"),
         image: imageUrl,
@@ -929,11 +919,9 @@ facilities: getField("facilities"),
       document.getElementById("bua").value = "";
       document.getElementById("landArea").value = "";
       document.getElementById("tenure").value = "";
-document.getElementById("bedrooms").value = "";
-document.getElementById("bathrooms").value = "";
-document.getElementById("carparks").value = "";
-document.getElementById("furnishing").value = "";
-document.getElementById("facilities").value = "";
+      document.getElementById("powerSupply").value = "";
+      document.getElementById("ceilingHeight").value = "";
+      document.getElementById("floorLoading").value = "";
       document.getElementById("features").value = "";
       document.getElementById("googleMapsLink").value = "";
       document.getElementById("description").value = "";
@@ -996,11 +984,9 @@ document.getElementById("facilities").value = "";
       document.getElementById("bua").value = item.bua || "";
       document.getElementById("landArea").value = item.landArea || "";
       document.getElementById("tenure").value = item.tenure || "";
-document.getElementById("bedrooms").value = item.bedrooms || "";
-document.getElementById("bathrooms").value = item.bathrooms || "";
-document.getElementById("carparks").value = item.carparks || "";
-document.getElementById("furnishing").value = item.furnishing || "";
-document.getElementById("facilities").value = item.facilities || "";
+      document.getElementById("powerSupply").value = item.powerSupply || "";
+      document.getElementById("ceilingHeight").value = item.ceilingHeight || "";
+      document.getElementById("floorLoading").value = item.floorLoading || "";
       document.getElementById("features").value = item.features || "";
       document.getElementById("googleMapsLink").value = item.googleMapsLink || "";
       document.getElementById("description").value = item.description || "";
