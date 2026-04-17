@@ -278,8 +278,25 @@
     const db = getFirestore(app);
     const appDiv = document.getElementById("app");
 
-    const params = new URLSearchParams(window.location.search);
-    const listingId = params.get("id");
+function getListingIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const oldId = params.get("id");
+  if (oldId) return oldId;
+
+  const path = window.location.pathname;
+  const parts = path.split("/").filter(Boolean);
+
+  if (parts[0] !== "listing" || !parts[1]) return null;
+
+  const urlKey = decodeURIComponent(parts[1]);
+  const lastDash = urlKey.lastIndexOf("-");
+
+  if (lastDash === -1) return null;
+
+  return urlKey.substring(lastDash + 1);
+}
+
+const listingId = getListingIdFromUrl();
 
     function formatPrice(price, listingType) {
       if (!price) return "";
