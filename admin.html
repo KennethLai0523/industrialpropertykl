@@ -1072,7 +1072,14 @@ saveProjectBtn.textContent = "Update Project";
             </div>
             <div class="listing-actions">
               <button class="btn btn-sm btn-light edit-btn">Edit</button>
-              <a class="btn btn-sm btn-green" href="detail.html?id=${docSnap.id}" target="_blank" style="text-decoration:none; text-align:center;">View</a>
+<a
+  class="btn btn-sm btn-green"
+  href="/listing/${item.urlKey || `${item.slug || 'listing'}-${docSnap.id}`}"
+  target="_blank"
+  style="text-decoration:none; text-align:center;"
+>
+  View
+</a>
             </div>
           `;
 
@@ -1192,71 +1199,79 @@ row.querySelector(".project-edit-btn").addEventListener("click", () => {
   }
 }
 
-    async function saveListing() {
-      const title = getField("title");
-      const price = getField("price");
-      const location = getField("location");
+async function saveListing() {
+  const title = getField("title");
+  const price = getField("price");
+  const location = getField("location");
 
-      if (!title || !price || !location) {
-        setStatus("Please fill in at least title, price, and location.", "red");
-        return;
-      }
+  if (!title || !price || !location) {
+    setStatus("Please fill in at least title, price, and location.", "red");
+    return;
+  }
 
-      if (!editingId && !selectedFile) {
-        setStatus("Please drag or choose one cover photo first.", "red");
-        return;
-      }
+  if (!editingId && !selectedFile) {
+    setStatus("Please drag or choose one cover photo first.", "red");
+    return;
+  }
 
-      saveBtn.disabled = true;
-      setStatus(editingId ? "Updating listing..." : "Saving listing...", "#333");
+  saveBtn.disabled = true;
+  setStatus(editingId ? "Updating listing..." : "Saving listing...", "#333");
 
-      try {
-        let finalImageUrl = existingImageUrl;
-        let finalAgentImageUrl = existingAgentImageUrl;
-        let finalGalleryUrls = [...existingGalleryUrls];
-        let keepCreatedAt = null;
+  try {
+    let finalImageUrl = existingImageUrl;
+    let finalAgentImageUrl = existingAgentImageUrl;
+    let finalGalleryUrls = [...existingGalleryUrls];
+    let keepCreatedAt = null;
 
-        if (editingId) {
-          const existingSnap = await getDoc(doc(db, "listings", editingId));
-          if (existingSnap.exists()) {
-            const existingData = existingSnap.data();
-            keepCreatedAt = existingData.createdAt || existingData.postedAt || null;
-          }
-        }
-
-        if (selectedFile) {
-          finalImageUrl = await uploadImage(selectedFile, "listing-images", title, progressText);
-        }
-
-        if (selectedAgentFile) {
-          finalAgentImageUrl = await uploadOptionalImage(selectedAgentFile, "agent-images", title, progressText);
-        }
-
-        if (selectedGalleryFiles.length > 0) {
-          finalGalleryUrls = await uploadGalleryImages(selectedGalleryFiles, title);
-        }
-
-        const data = getFormData(finalImageUrl, finalAgentImageUrl, finalGalleryUrls, keepCreatedAt);
-
-        if (editingId) {
-          await updateDoc(doc(db, "listings", editingId), data);
-          setStatus("Listing updated successfully.", "green");
-        } else {
-          await addDoc(collection(db, "listings"), data);
-          setStatus("Listing saved successfully.", "green");
-        }
-
-        progressText.textContent = "";
-        resetForm();
-        await loadListings();
-      } catch (error) {
-        console.error(error);
-        progressText.textContent = "";
-        setStatus("Failed to save listing. Check Storage rules and setup.", "red");
-      } finally {
-        saveBtn.disabled = false;
+    if (editingId) {
+      const existingSnap = await getDoc(doc(db, "listings", editingId));
+      if (existingSnap.exists()) {
+        const existingData = existingSnap.data();
+        keepCreatedAt = existingData.createdAt || existingData.postedAt || null;
       }
     }
+
+    if (selectedFile) {
+      finalImageUrl = await uploadImage(selectedFile, "listing-images", title, progressText);
+    }
+
+    if (selectedAgentFile) {
+      finalAgentImageUrl = await uploadOptionalImage(selectedAgentFile, "agent-images", title, progressText);
+    }
+
+    if (selectedGalleryFiles.length > 0) {
+      finalGalleryUrls = await uploadGalleryImages(selectedGalleryFiles, title);
+    }
+
+    const data = getFormData(finalImageUrl, finalAgentImageUrl, finalGalleryUrls, keepCreatedAt);
+
+    if (editingId) {
+      const urlKey = `${slugify(data.title)}-${editingId}`;
+      await updateDoc(doc(db, "listings", editingId), {
+        ...data,
+        urlKey
+      });
+      setStatus("Listing updated successfully.", "green");
+    } else {
+      const newRef = await addDoc(collection(db, "listings"), data);
+      const urlKey = `${slugify(data.title)}-${newRef.id}`;
+
+      await updateDoc(newRef, { urlKey });
+
+      setStatus("Listing saved successfully.", "green");
+    }
+
+    progressText.textContent = "";
+    resetForm();
+    await loadListings();
+  } catch (error) {
+    console.error(error);
+    progressText.textContent = "";
+    setStatus("Failed to save listing. Check Storage rules and setup.", "red");
+  } finally {
+    saveBtn.disabled = false;
+  }
+}
 
     async function saveBlog() {
       const title = getField("blogTitle");
