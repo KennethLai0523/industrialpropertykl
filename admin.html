@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Admin Panel | Industrial Property KL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/images/favicon.png?v=2">
   <style>
     * { box-sizing: border-box; }
 
@@ -398,7 +399,15 @@
         </div>
 
         <input id="features" placeholder="Features (comma separated or normal sentence)" />
-        <input id="googleMapsLink" placeholder="Google Maps Link" />
+
+        <input id="googleMapsLink" placeholder="Google Maps Link for detail page" />
+
+        <div class="grid-2">
+          <input id="latitude" placeholder="Latitude for Leaflet map (e.g. 3.1334)" />
+          <input id="longitude" placeholder="Longitude for Leaflet map (e.g. 101.7124)" />
+        </div>
+
+
         <textarea id="description" placeholder="Description"></textarea>
 
         <div class="grid-2">
@@ -866,7 +875,13 @@ saveProjectBtn.textContent = "Update Project";
         ceilingHeight: getField("ceilingHeight"),
         floorLoading: getField("floorLoading"),
         features: getField("features"),
+
+
         googleMapsLink: getField("googleMapsLink"),
+        latitude: getField("latitude"),
+        longitude: getField("longitude"),
+
+
         image: imageUrl,
         gallery: galleryUrls,
         description: getField("description"),
@@ -924,6 +939,8 @@ saveProjectBtn.textContent = "Update Project";
       document.getElementById("floorLoading").value = "";
       document.getElementById("features").value = "";
       document.getElementById("googleMapsLink").value = "";
+      document.getElementById("latitude").value = "";
+      document.getElementById("longitude").value = "";
       document.getElementById("description").value = "";
       document.getElementById("agentName").value = "Kenneth Lai";
       document.getElementById("agentPhone").value = "";
@@ -989,6 +1006,8 @@ saveProjectBtn.textContent = "Update Project";
       document.getElementById("floorLoading").value = item.floorLoading || "";
       document.getElementById("features").value = item.features || "";
       document.getElementById("googleMapsLink").value = item.googleMapsLink || "";
+      document.getElementById("latitude").value = item.latitude || "";
+      document.getElementById("longitude").value = item.longitude || "";
       document.getElementById("description").value = item.description || "";
       document.getElementById("agentName").value = item.agentName || "Kenneth Lai";
       document.getElementById("agentPhone").value = item.agentPhone || "";
@@ -1066,6 +1085,10 @@ saveProjectBtn.textContent = "Update Project";
               <div class="listing-meta">
                 ${item.price || "-"}<br>
                 ${item.location || "-"}, ${item.city || "-"}, ${item.state || "-"}<br>
+
+                <div><strong>Lat:</strong> ${item.latitude || "-"}</div>
+                <div><strong>Lng:</strong> ${item.longitude || "-"}</div>
+
                 ${item.type || "-"} | ${item.listingType || "-"} | ${item.status || "-"}<br>
                 ${item.agentName || "Kenneth Lai"} • ${formatPostedDate(item.postedAt)}
               </div>
@@ -1074,7 +1097,7 @@ saveProjectBtn.textContent = "Update Project";
               <button class="btn btn-sm btn-light edit-btn">Edit</button>
 <a
   class="btn btn-sm btn-green"
-  href="/listing/${item.urlKey || `${item.slug || 'listing'}-${docSnap.id}`}"
+  href="/listing/${item.slug}"
   target="_blank"
   style="text-decoration:none; text-align:center;"
 >
@@ -1445,14 +1468,30 @@ saveProjectBtn.textContent = "Save Project";
       });
     }
 
-onAuthStateChanged(auth, (user) => {
+const ADMIN_EMAILS = [
+  "kennethlaihk88@gmail.com", // 🔥 YOUR REAL ADMIN EMAIL ONLY
+  "agnescheesy88@yahoo.com"
+];
+
+onAuthStateChanged(auth, async (user) => {
   if (!user) {
     window.location.href = "login.html";
-  } else {
-    loadListings();
-    loadBlogs();
-    loadProjects(); // 🔥 THIS LINE
+    return;
   }
+
+
+  // 🔥 BLOCK NON-ADMIN USERS
+  if (!ADMIN_EMAILS.includes(user.email)) {
+    alert("Access denied. Admin only.");
+    await signOut(auth);
+    window.location.href = "login.html";
+    return;
+  }
+
+  // ✅ ONLY ADMIN CAN REACH HERE
+  loadListings();
+  loadBlogs();
+  loadProjects();
 });
 
     logoutBtn.addEventListener("click", async () => {

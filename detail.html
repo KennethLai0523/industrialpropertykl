@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="canonical" id="canonical-link">
+  <meta name="description" id="meta-desc" content="Industrial property listing in Kuala Lumpur and Selangor.">
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Property Detail | Industrial Property KL</title>
   <meta name="theme-color" content="#d9a73f" />
-  <link rel="stylesheet" href="shared-layout.css" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/shared-layout.css" />
   <style>
     .page {
       max-width: 1200px;
@@ -208,8 +213,8 @@
 
 .detail-btn-outline {
   background: white;
-  color: #1e88e5;
-  border: 1px solid #1e88e5;
+  color: #f0b132;
+  border: 1px solid #f0b132;
 }
 
     .loading,
@@ -258,10 +263,10 @@
 
   <div id="site-footer"></div>
 
-  <script type="module" src="shared-layout.js"></script>
+  <script type="module" src="/shared-layout.js"></script>
   <script type="module">
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       
@@ -278,25 +283,20 @@
     const db = getFirestore(app);
     const appDiv = document.getElementById("app");
 
-function getListingIdFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  const oldId = params.get("id");
-  if (oldId) return oldId;
-
+function getSlugFromUrl() {
   const path = window.location.pathname;
   const parts = path.split("/").filter(Boolean);
 
   if (parts[0] !== "listing" || !parts[1]) return null;
 
-  const urlKey = decodeURIComponent(parts[1]);
-  const lastDash = urlKey.lastIndexOf("-");
-
-  if (lastDash === -1) return null;
-
-  return urlKey.substring(lastDash + 1);
+  return decodeURIComponent(parts[1]);
 }
 
-const listingId = getListingIdFromUrl();
+const listingSlug = getSlugFromUrl();
+
+if (window.location.search) {
+  window.history.replaceState({}, "", `/listing/${listingSlug}`);
+}
 
     function formatPrice(price, listingType) {
       if (!price) return "";
@@ -356,25 +356,88 @@ const listingId = getListingIdFromUrl();
     window.changeMainImage = changeMainImage;
 
     async function loadListing() {
-      if (!listingId) {
-        appDiv.innerHTML = `<div class="error">Invalid listing ID</div>`;
+      if (!listingSlug) {
+        appDiv.innerHTML = `<div class="error">Invalid listing slug</div>`;
         return;
       }
 
       try {
-        const snap = await getDoc(doc(db, "listings", listingId));
+        const q = query(
+          collection(db, "listings"),
+          where("slug", "==", listingSlug)
+        );
 
-        if (!snap.exists()) {
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
           appDiv.innerHTML = `<div class="error">Listing not found</div>`;
           return;
         }
 
+        const snap = snapshot.docs[0];
         const data = snap.data();
+
+
+
+
         const pageTitle = data.title || "Property Detail";
+
+        // ✅ Title
+        document.title = `${pageTitle} | Industrial Property KL`;
+
+        // ✅ Description
+        const metaDesc = document.getElementById("meta-desc");
+        if (metaDesc) {
+          metaDesc.setAttribute(
+            "content",
+            `${pageTitle} in ${data.location || ""}. ${data.type || ""} for ${data.listingType || "sale"} in Kuala Lumpur / Selangor.`
+          );
+        }
+
+        const canonical = document.getElementById("canonical-link");
+        if (canonical) {
+          if (window.location.pathname.startsWith("/listing/")) {
+            canonical.href = `https://industrialpropertykl.com${window.location.pathname}`;
+          } else {
+            canonical.href = "https://industrialpropertykl.com/listings.html";
+          }
+        }
+
+
+
+
         const gallery = getGallery(data);
-        const mainImage = gallery[0] || "";
+        const mainImage = gallery[0] || data.image || "";
+
+        const structuredData = {
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": pageTitle,
+          "description": data.description || "",
+          "image": mainImage,
+          "offers": {
+            "@type": "Offer",
+            "price": String(data.price || "").replace(/[^\d.]/g, ""),
+            "priceCurrency": "MYR",
+            "availability": "https://schema.org/InStock"
+          }
+        };
+
+        /* 🔥 Prevent duplicate schema */
+        const oldSchema = document.getElementById("listing-schema");
+        if (oldSchema) oldSchema.remove();
+
+        /* 🔥 Inject new schema */
+        const script = document.createElement("script");
+        script.id = "listing-schema";
+        script.type = "application/ld+json";
+        script.text = JSON.stringify(structuredData);
+
+        document.head.appendChild(script);
+        
         const safeTitle = escapeHtml(pageTitle);
         const safeLocation = escapeHtml(safeText(data.location));
+
         const safeDescription = escapeHtml(safeText(data.description));
         const safeAddress = escapeHtml(safeText(data.address || data.location));
         const safeType = escapeHtml(safeText(data.type));
@@ -389,12 +452,21 @@ const listingId = getListingIdFromUrl();
           data.agentName && data.agentName !== "-" ? data.agentName : "Kenneth Lai"
         );
 
+        const isRent = data.listingType === "rent";
+
+        const categoryLink = isRent
+          ? "/factory-for-rent-kl.html"
+          : "/factory-for-sale-kl.html";
+
+        const categoryName = isRent
+          ? "Factory for Rent KL"
+          : "Factory for Sale KL";
+
         const whatsappText = encodeURIComponent(`Hi Kenneth, I am interested in [${pageTitle}]`);
         const whatsappLink = data.agentPhone
           ? `https://wa.me/${String(data.agentPhone).replace(/\D/g, "")}?text=${whatsappText}`
           : `https://wa.me/60166287357?text=${whatsappText}`;
 
-        document.title = `${pageTitle} | Industrial Property KL`;
 
         const thumbsHtml = gallery.map((img, index) => `
           <img
@@ -407,8 +479,11 @@ const listingId = getListingIdFromUrl();
 
         appDiv.className = "";
         appDiv.innerHTML = `
+
           <div class="breadcrumb">
-            <a href="index.html">Home</a>
+            <a href="/">Home</a>
+            <span class="sep">&gt;</span>
+            <a href="${categoryLink}">${categoryName}</a>
             <span class="sep">&gt;</span>
             <span>${safeTitle}</span>
           </div>
@@ -454,6 +529,11 @@ const listingId = getListingIdFromUrl();
               <div class="card">
                 <h3>Description</h3>
                 <div class="desc">${safeDescription}</div>
+                <div style="margin-top:18px;">
+                  <a href="${categoryLink}" style="color:#d9a73f; font-weight:bold; text-decoration:none;">
+                    View more ${categoryName}
+                  </a>
+                </div>
               </div>
 
               <div class="card">

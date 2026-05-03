@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Factory for Sale in KL | Industrial Property KL</title>
+  <meta name="description" content="Looking for factory for sale in Kuala Lumpur? Explore factories, warehouses and industrial properties for sale across KL and Selangor including Klang, Shah Alam, Bukit Raja and Sungai Buloh." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://industrialpropertykl.com/factory-for-sale-kl.html" />
+
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="/shared-layout.css" />
+
+  <style>
+    :root {
+      --gold: #d9a73f;
+      --dark: #111111;
+      --text: #222222;
+      --muted: #666666;
+      --bg: #f5f5f5;
+      --card: #ffffff;
+      --border: #e8e8e8;
+      --wa: #25D366;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      background:
+        linear-gradient(rgba(17,17,17,0.62), rgba(17,17,17,0.68)),
+        url('https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      color: #fff;
+      padding: 90px 0 80px;
+    }
+
+    .hero h1 {
+      margin: 0 0 14px;
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      max-width: 820px;
+      margin: 0;
+      font-size: 18px;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .section {
+      padding: 44px 0;
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+      font-size: clamp(28px, 3vw, 40px);
+      color: var(--dark);
+      line-height: 1.12;
+    }
+
+    .lead {
+      max-width: 900px;
+      color: var(--muted);
+      margin: 0 0 18px;
+    }
+
+    .content-card,
+    .cta-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.04);
+    }
+
+    .cta-box {
+      margin-top: 24px;
+    }
+
+    .points {
+      margin: 18px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .points li {
+      margin-bottom: 10px;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .btn-primary,
+    .btn-outline,
+    .btn-wa {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: #111;
+    }
+
+    .btn-outline {
+      border: 1px solid #ccc;
+      color: #111;
+      background: #fff;
+    }
+
+    .btn-wa {
+      background: var(--wa);
+      color: #fff;
+    }
+
+    .keyword-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .keyword-links a {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #fff4d4;
+      color: #8a6200;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .listing-section {
+      margin-top: 28px;
+    }
+
+    .listing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 20px;
+    }
+
+    .listing-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .listing-image-wrap {
+      position: relative;
+      height: 220px;
+      background: #eee;
+      overflow: hidden;
+    }
+
+    .listing-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .listing-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(17,17,17,0.86);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 7px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.3px;
+    }
+
+    .listing-body {
+      padding: 16px;
+    }
+
+    .listing-price {
+      font-size: 24px;
+      line-height: 1.2;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .listing-title {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.4;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .listing-location,
+    .listing-meta {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .listing-meta strong {
+      color: var(--text);
+    }
+
+    .listing-footer {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .listing-link {
+      color: #8a6200;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .loading-text,
+    .empty-text,
+    .error-text {
+      margin-top: 14px;
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .error-text {
+      color: #b42318;
+    }
+
+    @media (max-width: 1100px) {
+      .listing-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .hero {
+        padding: 70px 0 60px;
+      }
+
+      .listing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .listing-image-wrap {
+        height: 210px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Factory for Sale in Kuala Lumpur</h1>
+      <p>
+        Looking for factory for sale in KL? Industrial Property KL helps business owners,
+        investors, manufacturers and industrial users source suitable factories,
+        warehouses and industrial properties for sale across Kuala Lumpur and Selangor.
+      </p>
+    </div>
+  </section>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="content-card">
+          <h2 class="section-title">Industrial Factories for Sale in KL & Selangor</h2>
+          <p class="lead">
+            We focus on industrial property for sale including detached factories,
+            semi-detached factories, link factories, warehouses and industrial buildings
+            in key industrial areas such as Klang, Bukit Raja, Shah Alam,
+            Sungai Buloh, Kota Damansara, Subang and other established industrial zones
+            across the Klang Valley.
+          </p>
+
+          <p class="lead">
+            Whether you are buying for your own operations, long-term investment,
+            business expansion or relocation planning, we help you identify the
+            right factory for sale based on access, built-up size, land area,
+            power supply, loading requirements and long-term suitability.
+          </p>
+
+          <ul class="points">
+            <li>Factory for sale in Kuala Lumpur and Selangor</li>
+            <li>Semi-D, detached, link factory and warehouse options</li>
+            <li>Industrial properties suitable for manufacturing, storage and logistics use</li>
+            <li>Support for owner-occupiers, investors and industrial business expansion</li>
+          </ul>
+
+          <div class="keyword-links">
+            <a href="/categories/all-listings">View All Listings</a>
+            <a href="/factory-for-rent-kl.html">Factory for Rent KL</a>
+          </div>
+        </div>
+
+        <div class="listing-section">
+          <h2 class="section-title">Available Factory Listings for Sale</h2>
+          <p class="lead">
+            Browse current factory and warehouse sale listings from our latest inventory.
+            Click any property to view full details, gallery, address and agent contact.
+          </p>
+
+          <div id="listing-status" class="loading-text">Loading sale listings...</div>
+          <div id="listing-grid" class="listing-grid"></div>
+        </div>
+
+        <div class="cta-box">
+          <h2 class="section-title" style="font-size: 30px;">Need Help Finding the Right Factory for Sale?</h2>
+          <p class="lead" style="margin-bottom: 0;">
+            Share your preferred location, built-up size, budget and operational requirements.
+            We can recommend suitable factory for sale options in KL and Selangor based on
+            your business needs.
+          </p>
+
+          <div class="cta-actions">
+            <a class="btn-wa" href="https://wa.me/60166287357?text=Hi%20Kenneth,%20I%20am%20looking%20for%20a%20factory%20for%20sale%20in%20KL." target="_blank" rel="noopener noreferrer">WhatsApp Us</a>
+            <a class="btn-primary" href="/categories/all-listings">Browse Listings</a>
+            <a class="btn-outline" href="/contact.html">Contact Us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script type="module" src="/shared-layout.js"></script>
+  <script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyANrifzDiBgsM8MpFSbe-kxW_e89vKbCZ8",
+      authDomain: "industrialpropertykl.firebaseapp.com",
+      projectId: "industrialpropertykl",
+      storageBucket: "industrialpropertykl.firebasestorage.app",
+      messagingSenderId: "612612953532",
+      appId: "1:612612953532:web:94f956f783cb948db887b9"
+    };
+
+    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const listingGrid = document.getElementById("listing-grid");
+    const listingStatus = document.getElementById("listing-status");
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function formatPrice(price, listingType) {
+      if (!price) return "";
+      const clean = String(price).replace(/,/g, "").trim();
+
+      if (!isNaN(clean)) {
+        const num = Number(clean);
+        if (listingType === "rent") return "RM " + num.toLocaleString() + "/month";
+        if (num >= 1000000) return "RM " + (num / 1000000).toFixed(1).replace(".0", "") + "M";
+        return "RM " + num.toLocaleString();
+      }
+
+      return String(price).startsWith("RM") ? String(price) : "RM " + price;
+    }
+
+    function getImage(data) {
+      if (Array.isArray(data.gallery) && data.gallery.length) return data.gallery[0];
+      if (data.image) return data.image;
+      return "/images/logo.png";
+    }
+
+    function getListingUrl(data, docId) {
+      const key = data.urlKey || `${data.slug || "listing"}-${docId}`;
+      return `/listing/${key}`;
+    }
+
+    function buildCard(data, docId) {
+      const image = escapeHtml(getImage(data));
+      const title = escapeHtml(data.title || "Factory Listing");
+      const location = escapeHtml(data.location || "");
+      const type = escapeHtml(data.type || "-");
+      const bua = escapeHtml(data.bua || "-");
+      const url = escapeHtml(getListingUrl(data, docId));
+      const price = escapeHtml(formatPrice(data.price, data.listingType));
+
+      return `
+        <a class="listing-card" href="${url}">
+          <div class="listing-image-wrap">
+            <img class="listing-image" src="${image}" alt="${title}" loading="lazy" onerror="this.src='/images/logo.png'">
+            <span class="listing-badge">FOR SALE</span>
+          </div>
+          <div class="listing-body">
+            <div class="listing-price">${price}</div>
+            <h3 class="listing-title">${title}</h3>
+            <p class="listing-location">📍 ${location}</p>
+            <p class="listing-meta"><strong>Type:</strong> ${type}</p>
+            <p class="listing-meta"><strong>Built-up:</strong> ${bua}</p>
+            <div class="listing-footer">
+              <span class="listing-link">View Details</span>
+            </div>
+          </div>
+        </a>
+      `;
+    }
+
+    async function loadSaleListings() {
+      listingStatus.className = "loading-text";
+      listingStatus.textContent = "Loading sale listings...";
+      listingGrid.innerHTML = "";
+
+      try {
+        const q = query(collection(db, "listings"), orderBy("createdAt", "desc"));
+        const snapshot = await getDocs(q);
+
+        const saleListings = [];
+
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          if (data.listingType === "sale") {
+            saleListings.push({
+              id: docSnap.id,
+              ...data
+            });
+          }
+        });
+
+        if (!saleListings.length) {
+          listingStatus.className = "empty-text";
+          listingStatus.textContent = "No sale listings available yet.";
+          return;
+        }
+
+        listingStatus.textContent = "";
+
+        listingGrid.innerHTML = saleListings
+          .map((item) => buildCard(item, item.id))
+          .join("");
+      } catch (error) {
+        console.error(error);
+        listingStatus.className = "error-text";
+        listingStatus.textContent = "Failed to load sale listings.";
+      }
+    }
+
+    loadSaleListings();
+  </script>
+</body>
+</html>

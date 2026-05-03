@@ -2,6 +2,28 @@
 <html lang="en">
 <head>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "Industrial Property KL",
+      "url": "https://industrialpropertykl.com",
+      "logo": "https://industrialpropertykl.com/images/logo.png"
+    },
+    {
+      "@type": "RealEstateAgent",
+      "name": "Industrial Property KL",
+      "url": "https://industrialpropertykl.com",
+      "telephone": "+60166287357",
+      "areaServed": "Kuala Lumpur, Selangor",
+      "image": "https://industrialpropertykl.com/images/logo.png"
+    }
+  ]
+}
+</script>
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ML49L4TQ29"></script>
 <script>
@@ -12,20 +34,18 @@
   gtag('config', 'G-ML49L4TQ29');
 </script>
   <!-- Favicon (Google + all devices) -->
-<link rel="icon" type="image/png" sizes="32x32" href="https://industrialpropertykl.com/images/favicon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="https://industrialpropertykl.com/images/favicon.png">
-<link rel="apple-touch-icon" href="https://industrialpropertykl.com/images/favicon.png">
-
-<!-- Backup for Google -->
-<link rel="shortcut icon" href="https://industrialpropertykl.com/favicon.ico">
+<link rel="icon" href="/favicon.ico?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
   
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your industrial property expert in the KL & Selangor</title>
-  <meta name="description" content="Professional Expert Guidance for Industrial Property Investment, Leasing, and Business Expansion" />
+  <title>Industrial Property KL | Warehouse, Factory & Land Specialist</title>
+  <meta name="description" content="Trusted by 300+ property buyers & sellers in KL & Selangor" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://industrialpropertykl.com/" />
   <meta name="theme-color" content="#d9a73f" />
+  <meta property="og:image" content="https://industrialpropertykl.com/images/logo.png">
   <style>
     :root {
       --gold: #d9a73f;
@@ -151,11 +171,11 @@
 
     .hero {
       position: relative;
-      min-height: 560px;
+      min-height: 400px;
       color: #fff;
       background:
         linear-gradient(rgba(8,18,32,0.58), rgba(8,18,32,0.68)),
-        url('https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+        url('images/IndustrialHome.jpeg') center/cover no-repeat;
       display: flex;
       align-items: center;
     }
@@ -222,7 +242,7 @@
 
     .search-grid {
       display: grid;
-      grid-template-columns: 2.2fr 1fr 1fr 1fr auto;
+      grid-template-columns: 2.2fr 1fr 1fr auto;
       gap: 12px;
       align-items: center;
     }
@@ -789,6 +809,38 @@
       height: 32px;
       font-size: 13px;
     }
+
+.team-card {
+  text-align: center;
+  max-width: 220px;
+  margin: 0 auto;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+}
+
+.team-card img {
+  width: 100%;
+  max-width: 220px;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.team-name {
+  margin-top: 10px;
+  font-weight: 700;
+}
+
+.team-role {
+  color: #666;
+}
     
     @media (max-width: 1100px) {
       .listings {
@@ -937,9 +989,9 @@
 }
 
   .hero {
-    align-items: flex-start !important;   /* 🔥 THIS fixes it */
-    min-height: 650px !important;
-    padding-bottom: 200px !important;
+    align-items: flex-start !important;
+    min-height: 360px !important;   /* ✅ much shorter */
+    padding-bottom: 80px !important; /* ✅ reduce space */
   }
 
   .hero-content {
@@ -984,6 +1036,18 @@
     font-size: 14px;
   }
 
+  .reviews-grid {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 12px;
+  }
+
+  .reviews-grid .contact-card {
+    min-width: 260px;
+    flex: 0 0 auto;
+  }
+
   main {
     padding-top: 20px !important;
   }
@@ -1008,9 +1072,320 @@
 .team-grid > div:hover {
   transform: translateY(-5px);
 }
+
+.listings-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.status-toggle {
+  display: flex;
+  background: #fff4d4;
+  border: 1px solid #f0d98a;
+  border-radius: 12px;
+  padding: 3px;
+  gap: 4px;
+}
+
+.status-btn {
+  height: 36px;
+  padding: 0 12px;
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  color: #111;
+}
+
+.status-btn.active {
+  background: var(--gold);
+  color: #111;
+}
+
+@media (max-width: 820px) {
+  .listings-top {
+    align-items: flex-start !important;
+  }
+
+  .listings-controls {
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    gap: 8px !important;
+  }
+
+  .results-count {
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
+
+.search-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-input-wrapper input {
+  width: 100%;
+  height: 52px;
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+  padding: 0 48px 0 14px;
+  font-size: 15px;
+}
+
+.search-input-wrapper button {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 40px;
+  width: 100px;              /* 🔥 wider */
+  min-width: 100px !important;
+  padding: 0;               /* keep icon centered */
+  border-radius: 8px;
+  border: none;
+  background: var(--gold);
+  color: #111;
+  cursor: pointer;
+}
+
+#mapViewBtn {
+  height: 52px;
+  border-radius: 10px;
+  border: none;
+  background: #111;
+  color: #fff;
+  font-weight: 700;
+  padding: 0 18px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.map-panel {
+  position: absolute;
+  left: 50%;
+  bottom: -430px;
+  transform: translateX(-50%);
+  width: min(1180px, calc(100% - 32px));
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+  padding: 14px;
+  z-index: 5;
+}
+
+.map-panel.hidden {
+  display: none;
+}
+
+#propertyMap {
+  width: 100%;
+  height: 400px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+#closeMapBtn {
+  display: none;
+}
+
+@media (min-width: 821px) {
+  .hero.map-open {
+    margin-bottom: 430px;
+  }
+}
+
+@media (max-width: 820px) {
+
+  #propertyMap {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+  }
+
+  #closeMapBtn {
+    display: block;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10000;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+  }
+}
+
+.map-info-card {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  z-index: 10001;
+  width: 280px;
+  background: #fff;
+  color: #111;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  padding: 14px;
+}
+
+.map-info-card.hidden {
+  display: none;
+}
+
+.map-info-card-title {
+  font-weight: 800;
+  font-size: 14px;
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+
+.map-info-card-price {
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.map-info-card-location {
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.map-info-card a {
+  display: inline-block;
+  background: #d9a73f;
+  color: #111 !important;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+/* 🔥 MOBILE ONLY MAP BUTTON */
+#mobileMapViewBtn {
+  display: none;
+}
+
+@media (max-width: 820px) {
+  /* hide original map button */
+  #mapViewBtn {
+    display: none !important;
+  }
+
+  /* show mobile version under toggle */
+  #mobileMapViewBtn {
+    display: block;
+    width: 100%;
+    height: 44px;
+    margin-top: 8px;
+    border-radius: 10px;
+    border: none;
+    background: #111;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+  }
+}
+
+
+@media (max-width: 820px) {
+  .map-panel {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: auto !important;
+    transform: none !important;
+
+    width: 100vw !important;
+    height: 100vh !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    z-index: 9999 !important;
+    background: #fff;
+  }
+
+  #propertyMap {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+  }
+}
+
+@media (max-width: 820px) {
+  .map-panel:not(.hidden) {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100dvw !important;
+    height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    transform: none !important;
+    z-index: 99999 !important;
+    background: #fff !important;
+  }
+
+  .map-panel:not(.hidden) #propertyMap {
+    width: 100dvw !important;
+    height: 100dvh !important;
+    border-radius: 0 !important;
+  }
+
+  .map-panel:not(.hidden) + * {
+    display: none !important;
+  }
+
+  body:has(.map-panel:not(.hidden)) {
+    overflow: hidden !important;
+  }
+
+  .bucket-toggle {
+    display: none !important;
+  }
+
+.hero p {
+  font-size: 14px !important;
+}
+
+  /* slightly reduce vertical space */
+  .nav {
+    padding: 6px 0 !important;   /* was ~8-10 */
+  }
+
+  /* slightly smaller logo */
+  .brand-mark img {
+    width: 115px !important;     /* was ~120-125 */
+  }
+
+  /* slightly tighter buttons */
+  .nav-link,
+  .drop-btn {
+    min-height: 36px !important; /* was ~38-40 */
+    padding: 5px 5px !important;
+  }
+
+  /* slightly tighter login button */
+  .nav-actions .btn-primary {
+    padding: 5px 10px !important;
+  }
+}
+
   </style>
 
-  <link rel="stylesheet" href="shared-layout.css?v=12" />
+  <link rel="stylesheet" href="/shared-layout.css?v=12" />
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
   <div id="site-header"></div>
@@ -1023,16 +1398,21 @@
         <span class="badge">Ramp-Up Project</span>
         <span class="badge">Industrial Land</span>
       </div>
-      <h1>Your industrial property expert in the KL & Selangor</h1>
+      <h1>Your industrial property expert in KL & Selangor</h1>
       <p>
-        Professional Expert Guidance for Industrial Property Investment, Leasing, and Business Expansion
+        Trusted by 300+ property buyers & sellers in KL & Selangor
       </p>
       <a class="btn-wa" href="https://wa.me/60166287357" target="_blank" rel="noopener noreferrer">WhatsApp Our Team Now</a>
     </div>
 
     <div class="search-panel">
       <div class="search-grid">
-        <input type="text" id="keywordFilter" placeholder="Search factory, warehouse, Bukit Raja, Klang..." />
+        <div class="search-input-wrapper">
+          <input type="text" id="keywordFilter" placeholder="Search Bukit Raja, Klang..." />
+          <button id="searchBtn" type="button">🔍</button>
+        </div>
+
+  
 
         <select id="stateFilter">
           <option value="">All States</option>
@@ -1051,15 +1431,25 @@
           <option value="Kuala Lumpur">Kuala Lumpur</option>
         </select>
 
-        <select id="statusFilter">
-          <option value="">All Status</option>
-          <option value="For Sale">For Sale</option>
-          <option value="For Rent">For Rent</option>
-        </select>
-
-        <button id="searchBtn" type="button">Search</button>
+        <button id="mapViewBtn" type="button">Map View</button>
       </div>
     </div>
+
+    <div class="map-panel hidden" id="mapPanel">
+      <button id="closeMapBtn" type="button">×</button>
+      <div id="propertyMap"></div>
+
+      <div id="mapInfoCard" class="map-info-card hidden">
+        <div class="map-info-card-title" id="mapInfoTitle"></div>
+        <div class="map-info-card-price" id="mapInfoPrice"></div>
+        <div class="map-info-card-location" id="mapInfoLocation"></div>
+        <a id="mapInfoLink" href="#">View Details</a>
+      </div>
+    </div>
+
+
+
+
   </section>
 
   <main>
@@ -1069,9 +1459,19 @@
         <div class="listings-top">
           <div>
             <h2 class="section-title">Latest Property for Sale & Rent</h2>
+          </div>
+
+          <div class="listings-controls">
+            <div class="results-count" id="resultsCount">Showing 0 listings</div>
+
+            <div class="status-toggle">
+              <button type="button" class="status-btn active" data-status="">All</button>
+              <button type="button" class="status-btn" data-status="For Sale">For Sale</button>
+              <button type="button" class="status-btn" data-status="For Rent">For Rent</button>
+            </div>
+            <button id="mobileMapViewBtn" type="button">Map View</button>
             
           </div>
-          <div class="results-count" id="resultsCount">Showing 0 listings</div>
         </div>
 
         <div class="listings" id="listingGrid"></div>
@@ -1138,17 +1538,30 @@
     
         <div class="team-grid">
           
-          <div style="text-align:center; max-width:220px; margin:0 auto;">
-            <img src="images/kenneth.png" style="width:100%; max-width:220px; height:260px; object-fit:cover; border-radius:12px;">
-            <div style="margin-top:10px; font-weight:700;">Kenneth Lai</div>
-            <div style="color:#666;">Industrial Property Specialist</div>
-          </div>
+          <a href="/agent.html?id=kenneth-lai" class="team-card">
+            <img src="images/kenneth.png">
+            <div class="team-name">Kenneth Lai</div>
+            <div class="team-role">Industrial Property Specialist</div>
+          </a>
     
-          <div style="text-align:center; max-width:220px; margin:0 auto;">
-            <img src="images/agnes.png" style="width:100%; max-width:220px; height:260px; object-fit:cover; border-radius:12px;">
-            <div style="margin-top:10px; font-weight:700;">Agnes Chee</div>
-            <div style="color:#666;">Senior Negotiator</div>
-          </div>
+          <!-- 🟢 AGENT (clickable) -->
+          <a href="/agent.html?id=agnes-chee" class="team-card">
+            <img src="images/agnes.png">
+            <div class="team-name">Agnes Chee</div>
+            <div class="team-role">Senior Negotiator</div>
+          </a>
+
+          <a href="/agent.html?id=andrew-yap" class="team-card">
+            <img src="images/andrew.png">
+            <div class="team-name">Andrew Yap</div>
+            <div class="team-role">Industrial Analyst</div>
+          </a>
+  
+          <a href="/agent.html?id=magdalene" class="team-card">
+            <img src="images/magdalene.png">
+            <div class="team-name">Magdalene</div>
+            <div class="team-role">Industrial consultant</div>
+          </a>
     
         </div>
       </div>
@@ -1195,17 +1608,32 @@
   </div>
 
   <div id="site-footer"></div>
-  <script type="module" src="shared-layout.js?v=12"></script>
+  <script type="module" src="/shared-layout.js?v=12"></script>
   <script type="module">
     let listings = [];
-let filteredListings = [];
-let visibleCount = 6;
-const LOAD_STEP = 6;
+    let filteredListings = [];
+    let visibleCount = 6;
+    const LOAD_STEP = 6;
+
+    let currentStatus = ""; // 🔥 ADD THIS
+
+    document.querySelectorAll(".status-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".status-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        currentStatus = btn.dataset.status || "";
+        applyFilters(); // 🔥 IMPORTANT: use filter, not renderListings
+      });
+    });
 
     function generateLink(title) {
-      return '/' + title.toLowerCase()
-        .replace(/[^a-z0-9\s]/g, '')
-        .replace(/\s+/g, '-');
+      return (title || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
     }
 
     const listingGrid = document.getElementById('listingGrid');
@@ -1214,8 +1642,106 @@ const LOAD_STEP = 6;
     const keywordFilter = document.getElementById('keywordFilter');
     const stateFilter = document.getElementById('stateFilter');
     const cityFilter = document.getElementById('cityFilter');
-    const statusFilter = document.getElementById('statusFilter');
     const searchBtn = document.getElementById('searchBtn');
+
+const mapViewBtn = document.getElementById("mapViewBtn");
+const mobileMapViewBtn = document.getElementById("mobileMapViewBtn");
+const mapPanel = document.getElementById("mapPanel");
+const closeMapBtn = document.getElementById("closeMapBtn");
+
+let propertyMap = null;
+let mapMarkers = [];
+
+
+
+function initMap() {
+  if (propertyMap) return;
+
+  propertyMap = L.map("propertyMap").setView([3.139, 101.6869], 10);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap"
+  }).addTo(propertyMap);
+}
+
+function renderMapMarkers() {
+  if (!propertyMap) return;
+
+  mapMarkers.forEach(marker => propertyMap.removeLayer(marker));
+  mapMarkers = [];
+
+  const bounds = [];
+
+  filteredListings.forEach(item => {
+    const latRaw = item.latitude;
+    const lngRaw = item.longitude;
+
+    if (latRaw === undefined || latRaw === null || latRaw === "") return;
+    if (lngRaw === undefined || lngRaw === null || lngRaw === "") return;
+
+    const lat = Number(latRaw);
+    const lng = Number(lngRaw);
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+    const marker = L.marker([lat, lng]).addTo(propertyMap);
+
+    marker.on("click", () => {
+      propertyMap.setView([lat, lng], 15, {
+        animate: true,
+        duration: 0.6
+      });
+
+      const card = document.getElementById("mapInfoCard");
+
+      document.getElementById("mapInfoTitle").textContent = item.title || "";
+      document.getElementById("mapInfoPrice").textContent = item.price || "";
+      document.getElementById("mapInfoLocation").textContent = item.location || "";
+      document.getElementById("mapInfoLink").href = `/listing/${item.slug || ""}`;
+
+      card.classList.remove("hidden");
+    });
+
+    mapMarkers.push(marker);
+    bounds.push([lat, lng]);
+  });
+
+  if (bounds.length > 0) {
+    propertyMap.fitBounds(bounds, { padding: [40, 40] });
+  } else {
+    propertyMap.setView([3.139, 101.6869], 11);
+  }
+}
+
+mapViewBtn.addEventListener("click", () => {
+  mapPanel.classList.toggle("hidden");
+  document.querySelector(".hero").classList.toggle("map-open", !mapPanel.classList.contains("hidden"));
+
+  initMap();
+
+  setTimeout(() => {
+    propertyMap.invalidateSize();
+    renderMapMarkers();
+  }, 200);
+});
+
+mobileMapViewBtn.addEventListener("click", () => {
+  mapPanel.classList.toggle("hidden");
+  document.querySelector(".hero").classList.toggle("map-open", !mapPanel.classList.contains("hidden"));
+
+  initMap();
+
+  setTimeout(() => {
+    propertyMap.invalidateSize();
+    renderMapMarkers();
+  }, 200);
+});
+
+closeMapBtn.addEventListener("click", () => {
+  mapPanel.classList.add("hidden");
+  document.querySelector(".hero").classList.remove("map-open");
+});
 
 function renderListings(items) {
   const loadMoreBtn = document.getElementById('loadMoreBtn');
@@ -1242,7 +1768,7 @@ function renderListings(items) {
     card.className = 'listing-card';
     card.innerHTML = `
       <div class="listing-image" style="background-image:url('${item.image}')">
-        <span class="listing-tag">${item.status}</span>
+        <span class="listing-tag">${item.listingType === "rent" ? "For Rent" : "For Sale"}</span>
         <div class="image-actions">
           <button class="image-btn" onclick="addToCompare(${realIndex})" style="width:auto;padding:0 10px;font-size:12px;">Compare</button>
           <button class="image-btn" onclick="saveProperty(${realIndex})">♡</button>
@@ -1267,7 +1793,7 @@ function renderListings(items) {
         </div>
         <div class="listing-actions">
           <a class="btn-wa" href="https://wa.me/60166287357?text=${encodeURIComponent('Hi Kenneth, I am interested in ' + item.title + ' at ' + item.location + '.')}" target="_blank">WhatsApp</a>
-          <a class="btn-primary" href="detail.html?id=${item.id}">Details</a>
+          <a class="btn-primary" href="/listing/${item.slug || generateLink(item.title)}">Details</a>
         </div>
       </div>
     `;
@@ -1285,9 +1811,11 @@ function applyFilters() {
   const keyword = keywordFilter.value.trim().toLowerCase();
   const state = stateFilter.value;
   const city = cityFilter.value;
-  const status = statusFilter.value;
+  const status = currentStatus;
 
   filteredListings = listings.filter(item => {
+    if (item.listingOwner === "agent") return false;
+
     const haystack = [item.title, item.location, item.state, item.city, item.type, item.description]
       .join(' ')
       .toLowerCase();
@@ -1295,14 +1823,16 @@ function applyFilters() {
     const matchKeyword = !keyword || haystack.includes(keyword);
     const matchState = !state || item.state === state;
     const matchCity = !city || item.city === city;
-    const matchStatus = !status || item.status === status;
+    const matchStatus =
+      !status ||
+      (status === "For Sale" && item.listingType === "sale") ||
+      (status === "For Rent" && item.listingType === "rent");
 
     return matchKeyword && matchState && matchCity && matchStatus;
   });
 
   visibleCount = LOAD_STEP;
   renderListings(filteredListings);
-  document.getElementById('listings').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
     searchBtn.addEventListener('click', applyFilters);
@@ -1313,7 +1843,9 @@ function applyFilters() {
     document.addEventListener('click', function (e) {
       const typeLink = e.target.closest('[data-type-link]');
 if (typeLink) {
-  document.getElementById('statusFilter').value = '';
+  currentStatus = "";
+  document.querySelectorAll(".status-btn").forEach(b => b.classList.remove("active"));
+  document.querySelector('.status-btn[data-status=""]').classList.add("active");
   document.getElementById('stateFilter').value = '';
   document.getElementById('cityFilter').value = '';
   document.getElementById('keywordFilter').value = '';
@@ -1470,8 +2002,10 @@ async function loadListingsFromFirebase() {
     });
   });
 
-listings = firebaseListings;
-filteredListings = firebaseListings;
+// 🔥 REMOVE agent listings from homepage
+listings = firebaseListings.filter(item => item.listingOwner !== "agent");
+
+filteredListings = listings;
 visibleCount = LOAD_STEP;
 renderListings(filteredListings);
 }
@@ -1495,7 +2029,7 @@ const agents = [
     desc1: `With over a decade of experience in the industrial property market, I focus on helping businesses and investors identify and secure suitable factory, warehouse, and industrial land opportunities across Kuala Lumpur, Klang, and Selangor.`,
     desc2: `I provide practical guidance based on your operational needs, location requirements, and long-term business goals, ensuring every property decision supports your growth and efficiency.`,
     phone: "+60 12-289 5038",
-    email: "agnescheesy@yahoo.com"
+    email: "agnescheesy88@yahoo.com"
   }
 ];
 
@@ -1553,6 +2087,7 @@ function setupAgentSlider() {
 setupAgentSlider();
 // 🚀 USE FIREBASE INSTEAD OF STATIC DATA
 loadListingsFromFirebase();
+
 
 </script>
 </body>
